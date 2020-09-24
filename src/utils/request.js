@@ -1,7 +1,7 @@
 import axios from 'axios'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
-
+import message from 'ant-design-vue/es/message'
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
@@ -57,10 +57,10 @@ request.interceptors.response.use(response => {
   // data success data error
   if (data.success === false) {
     // 抛出错误到 errorHandler 中处理
-    const error = new Error(data.errorMessage)
+    const error = new Error(data.errorMessage || '操作失败')
     error.name = 'BizError'
     error.data = data
-    error.info = data.errorInfo
+    message.error(data.errorMessage || '操作失败')
     throw error
   }
   return data.data

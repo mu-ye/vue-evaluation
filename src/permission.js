@@ -7,7 +7,7 @@ import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 
 NProgress.configure({ showSpinner: false })
 
-const allowRoutePathList = ['/user/login']
+const allowRoutePathList = ['/user/login', '/grade']
 const loginRoutePath = '/user/login'
 const IndexRoutePath = '/'
 
