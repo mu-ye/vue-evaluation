@@ -2,12 +2,16 @@
   <div>
     <a-row>
       <a-col :span="8" style="text-align: center">
-        <a-card size="big" title="待抽签代表队" style="width: 300px">
+        <div>
+        <a-card size="small" title="待抽签代表队" style="width: 300px;float: right">
           <p v-for="(item, key) in forDrawCompany" :key="key">{{ item }} </p>
         </a-card>
+        </div>
       </a-col>
-      <a-col :span="8" style="text-align: center">
-        <a-button type="primary" @click="startDraw">开始抽签</a-button>
+      <a-col :span="8">
+        <div style="text-align: center">
+          <a-button type="primary" @click="startDraw">开始抽签</a-button>
+        </div>
       </a-col>
       <a-col :span="8" style="text-align: center">
         <a-card size="small" title="抽签结果" style="width: 300px">
