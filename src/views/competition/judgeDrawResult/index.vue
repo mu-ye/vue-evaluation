@@ -48,23 +48,23 @@
 </template>
 
 <script>
-export default {
-  name: 'Home',
-  data () {
-    return {
-      groups: ''
-    }
-  },
-  mounted () {
-    this.init()
-  },
-  methods: {
-    init () {
-      this.axios.get('/judge/getGroupJudgeVO').then(data => {
-        console.log(data)
-        this.groups = data
-      })
+  export default {
+    name: 'Home',
+    data () {
+      return {
+        groups: ''
+      }
+    },
+    mounted () {
+      this.init()
+    },
+    methods: {
+      init () {
+        this.axios.get('/judge/getGroupJudgeVO').then(data => {
+          console.log(data)
+          this.groups = data
+        })
+      }
     }
   }
-}
 </script>
