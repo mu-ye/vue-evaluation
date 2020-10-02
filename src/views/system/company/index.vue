@@ -5,7 +5,7 @@
         新增单位
       </a-button>
     </div>
-    <a-table :columns="columns" :data-source="data" rowKey="id">
+    <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false">
       <span slot="action" slot-scope="text, record">
         <a-button type="primary" @click="showDrawer(record)">
           编辑

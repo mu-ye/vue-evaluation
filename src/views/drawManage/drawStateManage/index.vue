@@ -1,20 +1,34 @@
 <template>
   <div>
-    <div style="margin-bottom: 16px">
+    <a-row>
+      <a-col span="24">
+        <a-alert
+          message="提示信息！"
+          description="1.参赛队抽签重置，五项都需要重置；2.考生赛位抽签重置，仅重置自己；
+3.裁判类型充钱重置，三四五都需要重置；4.执行裁判抽签重置，四五都需要重置；5.裁判位置抽签，仅重置自己"
+          type="info"
+          show-icon
+        />
+      </a-col>
+    </a-row>
+    <div style="margin-top: 10px">
       <a-button type="primary" :disabled="!hasSelected" :loading="loading" @click="studentSign">
-        签到
+        重置
       </a-button>
       <span style="margin-left: 8px">
         <template v-if="hasSelected">
-          {{ `Selected ${selectedRowKeys.length} items` }}
+          {{ `已选择 ${selectedRowKeys.length} 项` }}
         </template>
       </span>
     </div>
-    <a-table rowKey="id" :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"  :pagination="false">
-      <span slot="action" slot-scope="text,record">
-        <div v-if="record.signState == '0'">未签到</div>
-        <div v-else>已签到</div>
-      </span>
+    <a-table
+      rowKey="id"
+      :columns="columns"
+      :data-source="data"
+      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :pagination="false"
+      bordered
+      style="margin-top: 10px">
     </a-table>
   </div>
 </template>
@@ -26,39 +40,14 @@
       key: 'id'
     },
     {
-      title: '编码',
-      dataIndex: 'code',
-      key: 'code'
+      title: '抽签名称',
+      dataIndex: 'drawName',
+      key: 'drawName'
     },
     {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name'
-    },
-    {
-      title: '身份证号',
-      dataIndex: 'idCard',
-      key: 'idCard'
-    },
-    {
-      title: '性别',
-      dataIndex: 'sex',
-      key: 'sex'
-    },
-    {
-      title: '电话',
-      dataIndex: 'phone',
-      key: 'phone'
-    },
-    {
-      title: '所属单位',
-      dataIndex: 'companyName',
-      key: 'companyName'
-    },
-    {
-      title: '签到状态',
-      key: 'action',
-      scopedSlots: { customRender: 'action' }
+      title: '状态',
+      dataIndex: 'stateName',
+      key: 'stateName'
     }
   ]
 
@@ -83,7 +72,7 @@
     },
     methods: {
       init () {
-        this.axios.get('/judge/getJudgeList').then(data => {
+        this.axios.get('/drawState/getDrawStateList').then(data => {
           this.data = data
         })
       },
@@ -94,7 +83,7 @@
           this.loading = false
           console.log(this.selections)
 
-          this.axios.post('/judge/signIn', this.selectedRowKeys).then(() => {
+          this.axios.post('/drawState/reset', this.selectedRowKeys).then(() => {
             this.selectedRowKeys = []
             this.init()
           })
@@ -104,11 +93,10 @@
         console.log('selectedRowKeys changed: ', selectedRowKeys)
         this.selectedRowKeys = selectedRowKeys
         this.selectedRows = selectedRows
+      },
+      action (text, record) {
+        return record.name + '***' + record.name
       }
-      // studentSign () {
-      //   console.log(this.selectedRowKeys)
-      //  // this.axios.post('', this.rowSelection).then(() => {})
-      // }
     }
   }
 </script>

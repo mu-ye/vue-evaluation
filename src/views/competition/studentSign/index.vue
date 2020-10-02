@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 16px">
-      <a-button type="primary" :disabled="!hasSelected" :loading="loading" @click="studentSign">
+      <a-button type="primary" :disabled="!hasSelected" :loading="loading" @click="studentSign" >
         签到
       </a-button>
       <span style="margin-left: 8px">
@@ -10,7 +10,7 @@
         </template>
       </span>
     </div>
-    <a-table rowKey="id" :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" >
+    <a-table rowKey="id" :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :pagination="false">
       <span slot="action" slot-scope="text,record">
         <div v-if="record.signState == '0'">未签到</div>
         <div v-else>已签到</div>
