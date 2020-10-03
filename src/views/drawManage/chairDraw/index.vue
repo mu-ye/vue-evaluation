@@ -68,8 +68,9 @@
     },
     methods: {
       drawSeat () {
-        this.axios.get('/seat-draw/getSeatDrawList').then(data => {
+        this.axios.get('/student/drawSeat').then(data => {
           this.drawSeatResult = data
+          this.init()
         })
       },
       init () {
