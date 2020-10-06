@@ -11,16 +11,17 @@ export default {
     return {}
   },
   render () {
-    const {
+    /* const {
       $route: { meta }
-    } = this
-    const inKeep = (
+    } = this */
+    /* const inKeep = (
       <keep-alive>
         <router-view />
       </keep-alive>
-    )
+    ) */
     const notKeep = <router-view />
-    return this.keepAlive || meta.keepAlive ? inKeep : notKeep
+    // return this.keepAlive || meta.keepAlive ? inKeep : notKeep
+    return notKeep
   }
 }
 </script>

@@ -25,78 +25,74 @@
       rowKey="id"
       :columns="columns"
       :data-source="data"
-      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :pagination="false"
       bordered
-      style="margin-top: 10px">
+      style="margin-top: 10px"
+    >
     </a-table>
   </div>
 </template>
 <script>
-  const columns = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id'
-    },
-    {
-      title: '抽签名称',
-      dataIndex: 'drawName',
-      key: 'drawName'
-    },
-    {
-      title: '状态',
-      dataIndex: 'stateName',
-      key: 'stateName'
+const columns = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    key: 'id'
+  },
+  {
+    title: '抽签名称',
+    dataIndex: 'drawName',
+    key: 'drawName'
+  },
+  {
+    title: '状态',
+    dataIndex: 'stateName',
+    key: 'stateName'
+  }
+]
+
+const data = []
+
+export default {
+  data () {
+    return {
+      data,
+      columns,
+      loading: false,
+      selectedRowKeys: []
     }
-  ]
-
-  const data = []
-
-  export default {
-    data () {
-      return {
-        data,
-        columns,
-        loading: false,
-        selectedRowKeys: []
-      }
+  },
+  mounted () {
+    this.init()
+  },
+  computed: {
+    hasSelected () {
+      return this.selectedRowKeys.length > 0
+    }
+  },
+  methods: {
+    init () {
+      this.axios.get('/drawState/getDrawStateList').then(data => {
+        this.data = data
+      })
     },
-    mounted () {
-      this.init()
+    studentSign () {
+      this.axios.post('/drawState/reset', this.selectedRowKeys).then(() => {
+        this.$message.success('重置成功')
+        this.selectedRowKeys = []
+        this.init()
+      })
     },
-    computed: {
-      hasSelected () {
-        return this.selectedRowKeys.length > 0
-      }
+    // 监控 复选框乱中ids
+    onSelectChange (selectedRowKeys, selectedRows) {
+      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
     },
-    methods: {
-      init () {
-        this.axios.get('/drawState/getDrawStateList').then(data => {
-          this.data = data
-        })
-      },
-      studentSign () {
-        this.loading = true
-        // ajax request after empty completing
-        setTimeout(() => {
-          this.loading = false
-          console.log(this.selections)
-
-          this.axios.post('/drawState/reset', this.selectedRowKeys).then(() => {
-            this.selectedRowKeys = []
-            this.init()
-          })
-        }, 1000)
-      },
-      onSelectChange (selectedRowKeys, selectedRows) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys)
-        this.selectedRowKeys = selectedRowKeys
-        this.selectedRows = selectedRows
-      },
-      action (text, record) {
-        return record.name + '***' + record.name
-      }
+    action (text, record) {
+      return record.name + '***' + record.name
     }
   }
+}
 </script>
