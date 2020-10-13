@@ -103,7 +103,7 @@ export const constantRouterMap = [
     component: () => import(/* webpackChunkName: "fail" */ '@/views/grade')
   },
   {
-    path: '/bigScreenShow',
-    component: () => import(/* webpackChunkName: "fail" */ '@/views/bigScreenShow/BigScreen')
+    path: '/pdf',
+    component: () => import(/* webpackChunkName: "fail" */ '@/views/pdf')
   }
 ]

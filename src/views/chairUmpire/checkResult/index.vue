@@ -53,7 +53,7 @@
               </a-select>
             </a-col>
             <a-col span="8">
-              <a-button type="primary" @click="checkResult">确认提交</a-button>
+              <a-button type="primary" @click="checkResult">查看</a-button>
             </a-col>
           </a-row>
         </a-card>
