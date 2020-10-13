@@ -129,12 +129,8 @@
 </template>
 
 <script>
-import HomeSelectForm from '@/views/HomeSelectForm'
 export default {
   name: 'Home',
-  components: {
-    HomeSelectForm
-  },
   data () {
     return {
       groupNumberData: [1, 2, 3, 4, 5, 6, 7],

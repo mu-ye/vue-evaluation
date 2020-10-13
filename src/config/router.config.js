@@ -101,5 +101,9 @@ export const constantRouterMap = [
   {
     path: '/grade',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/grade')
+  },
+  {
+    path: '/pdf',
+    component: () => import(/* webpackChunkName: "fail" */ '@/views/pdf')
   }
 ]
