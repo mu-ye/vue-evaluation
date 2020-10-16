@@ -108,7 +108,7 @@
     },
     methods: {
       init () {
-        this.axios.get('/student/getStudentList').then(data => {
+        this.axios.get('/student/getStudentListHaveRegister').then(data => {
           console.log(data)
           this.data = data
         })

@@ -32,7 +32,7 @@
             style="margin-top: 10px">
             <span slot="action" slot-scope="text,record">
               <div v-if="record.testDayState === 2">已进入备考区</div>
-              <div v-else-if ="record.testDayState=== 1">候考区等待</div>
+              <div v-else-if="record.testDayState=== 1">候考区等待</div>
               <div v-else-if="record.testDayState=== 3">已进入考试区</div>
               <div v-else-if="record.testDayState=== 4">已离场</div>
             </span>
@@ -107,7 +107,7 @@
     },
     methods: {
       init () {
-        this.axios.get('/student/getStudentList').then(data => {
+        this.axios.get('/student/getStudentListHaveSignOne').then(data => {
           console.log(data)
           this.data = data
         })

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <a-button @click="test()">测试</a-button>
     <a-modal
       :visible="visible"
       :confirm-loading="confirmLoading"
