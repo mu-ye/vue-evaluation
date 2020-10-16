@@ -103,20 +103,20 @@ const vueConfig = {
     // development server port 8000
     port: 8000,
     proxy: {
-      '/abc': {
+      '/api': {
         target: 'http://localhost:8889',
         changeOrigin: true,
         pathRewrite: {
-          '^/abc': ''
-        }
-      },
-      '/zzp': {
-        target: 'http://192.168.96.7:8889',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/zzp': ''
+          '^/api': ''
         }
       }
+      // '/zzp': {
+      //   target: 'http://192.168.96.7:8889',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/zzp': ''
+      //   }
+      // }
     }
   },
 
