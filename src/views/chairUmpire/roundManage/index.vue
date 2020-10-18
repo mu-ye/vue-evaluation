@@ -18,10 +18,10 @@
               <a-button type="primary" class="button" :disabled="nextState" @click="doNext">下一场</a-button>
             </a-col>
             <a-col :span="2" :offset="1">
-              <a-button type="primary" class="button" :disabled="drawState">抽题</a-button>
+              <a-button type="primary" class="button" :disabled="drawState" @click="doDraw">抽题</a-button>
             </a-col>
             <a-col :span="2" :offset="1">
-              <a-button type="primary" class="button" :disabled="issueState">下发</a-button>
+              <a-button type="primary" class="button" :disabled="issueState" @click="doIssue">下发</a-button>
             </a-col>
           </a-row>
         </a-card>
@@ -53,7 +53,7 @@
           </a-row>
         </a-card>
       </a-col>
-      <a-col :span="6">
+      <a-col :span="6" v-if="judgeResultShow">
         <a-card size="small">
           <a-row style="margin-top: 18px">
             <a-col :span="22" :offset="1">
@@ -75,9 +75,9 @@
 <script>
 const studentColumns = [
   {
-    title: '考生编号',
-    className: 'code',
-    dataIndex: 'code'
+    title: '考生姓名',
+    className: 'name',
+    dataIndex: 'name'
   },
   {
     title: '考生就绪状态',
@@ -87,9 +87,9 @@ const studentColumns = [
 ]
 const judgeColumns = [
   {
-    title: '裁判编号',
-    className: 'code',
-    dataIndex: 'code'
+    title: '裁判名字',
+    className: 'name',
+    dataIndex: 'name'
   },
   {
     title: '裁判就绪状态',
@@ -113,9 +113,10 @@ export default {
   data () {
     return {
       configVO: '',
-      nextState: false,
+      nextState: true,
       drawState: true,
       issueState: true,
+      judgeResultShow: false,
       studentColumns,
       judgeColumns,
       questionColumns,
@@ -131,12 +132,11 @@ export default {
     }
   },
   mounted () {
-    this.init()
-    this.getQuestionData()
-    this.getDrawState()
-    this.getIssueState()
-    this.getNextState()
     this.getConfigVO()
+    this.stateTimer = setInterval(this.getState, 1000)
+    this.studentTimer = setInterval(this.getStudentData, 1000)
+    this.judgeTimer = setInterval(this.getJudgeData, 1000)
+    this.questionTimer = setInterval(this.getQuestionData, 1000)
   },
   methods: {
     getConfigVO () {
@@ -144,19 +144,40 @@ export default {
         this.configVO = data
       })
     },
-    getNextState () {
-      this.axios.get('/questionDraw/getList').then(data => {
-        this.questionData = data
-      })
-    },
-    getDrawState () {
-      this.axios.get('/config/getDrawState').then(data => {
-        this.drawState = false
-      })
-    },
-    getIssueState () {
-      this.axios.get('/config/getIssueState').then(data => {
-        this.issueState = false
+    getState () {
+      this.axios.get('/config/getState').then(data => {
+        switch (data) {
+          case 0:
+            this.nextState = true
+            this.drawState = true
+            this.issueState = true
+            this.judgeResultShow = false
+            break
+          case 1:
+            this.nextState = true
+            this.drawState = false
+            this.issueState = true
+            this.judgeResultShow = false
+            break
+          case 2:
+            this.nextState = true
+            this.drawState = true
+            this.issueState = false
+            this.judgeResultShow = true
+            break
+          case 3:
+            this.nextState = true
+            this.drawState = true
+            this.issueState = true
+            this.judgeResultShow = true
+            break
+          case 4:
+            this.nextState = false
+            this.drawState = true
+            this.issueState = true
+            this.judgeResultShow = true
+            break
+        }
       })
     },
     getQuestionData () {
@@ -164,11 +185,23 @@ export default {
         this.questionData = data
       })
     },
-    init () {
-      this.axios.get('/config/getInfo').then(data => {
-        console.log(data)
-        this.form.gameNumber = data.gameNumber
-        this.form.gameRound = data.gameRound
+    getStudentData () {
+      this.axios.get('/seatDraw/getStudentReadyShowVO').then(data => {
+        this.studentData = data
+        if (data === null) {
+          clearInterval(this.studentTimer)
+          clearInterval(this.judgeTimer)
+          clearInterval(this.stateTimer)
+          clearInterval(this.questionTimer)
+          this.$success({
+            title: '比赛全部结束'
+          })
+        }
+      })
+    },
+    getJudgeData () {
+      this.axios.get('/judgeDrawResult/getJudgeReadyList').then(data => {
+        this.judgeData = data
       })
     },
     handleSubmit () {
@@ -178,9 +211,20 @@ export default {
     },
 
     doNext () {
-      this.axios.get('/config/nextChange').then(data => {
+      this.axios.get('/config/doNext').then(data => {
         this.$message.success('切换场次成功')
         this.getConfigVO()
+      })
+    },
+    doDraw () {
+      this.axios.get('/questionDraw/doDraw').then(data => {
+        this.$message.success('抽题成功')
+      })
+    },
+    doIssue () {
+      this.axios.get('/config/doIssue').then(data => {
+        this.$message.success('下发试卷试卷成功')
+        this.issueState = true
       })
     }
   }
