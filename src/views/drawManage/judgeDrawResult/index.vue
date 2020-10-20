@@ -15,23 +15,13 @@
                 <b>{{ item.groupName }}</b>
               </p>
               <a-row :gutter="16">
-                <a-col
-                  class="gutter-row"
-                  :span="8"
-                  v-for="judgeType in item.groupJudgeTypeVOList"
-                  :key="judgeType.typeName"
-                >
+                <a-col class="gutter-row" :span="8" v-for="judgeType in item.typeShowVOList" :key="judgeType.typeName">
                   <a-card hoverable :bordered="true" style="margin-top: 20px">
                     <p style="text-align: center">
                       <b>{{ judgeType.typeName }}</b>
                     </p>
                     <a-row :gutter="16">
-                      <a-col
-                        class="gutter-row"
-                        :span="12"
-                        v-for="judge in judgeType.groupTypeJudgeVOList"
-                        :key="judge.code"
-                      >
+                      <a-col class="gutter-row" :span="12" v-for="judge in judgeType.judgeShowVOList" :key="judge.code">
                         <a-card hoverable :bordered="true" style="margin-top: 20px">
                           <p style="text-align: center">
                             <b>{{ judge.name }}</b>

@@ -129,61 +129,61 @@
 </template>
 
 <script>
-export default {
-  name: 'Home',
-  data () {
-    return {
-      groupNumberData: [1, 2, 3, 4, 5, 6, 7],
-      groupRoundData: [1, 2, 4],
-      formLayout: 'horizontal',
-      form: this.$form.createForm(this, { name: 'coordinated' }),
-      groups: []
-    }
-  },
-  mounted () {
-    this.init()
-  },
-  methods: {
-    init () {
-      this.axios
-        .get('/judge/getGroupShowVO', {
-          params: {
-            gameNumber: 1,
-            gameRound: 1
+  export default {
+    name: 'Home',
+    data () {
+      return {
+        groupNumberData: [1, 2, 3, 4, 5, 6, 7],
+        groupRoundData: [1, 2, 4],
+        formLayout: 'horizontal',
+        form: this.$form.createForm(this, { name: 'coordinated' }),
+        groups: []
+      }
+    },
+    mounted () {
+      this.init()
+    },
+    methods: {
+      init () {
+        this.axios
+          .get('/judge/getGroupShowVO', {
+            params: {
+              gameNumber: 1,
+              gameRound: 1
+            }
+          })
+          .then(data => {
+            console.log(data)
+            this.groups = data
+          })
+      },
+      // 查询
+      handleSubmit (e) {
+        e.preventDefault()
+        this.form.validateFields((err, values) => {
+          if (!err) {
+            console.log('Received values of form: ', values)
+            this.axios
+              .get('/judge/getGroupShowVO', {
+                params: {
+                  gameNumber: values.gameNumber,
+                  gameRound: values.gameRound
+                }
+              })
+              .then(data => {
+                this.groups = data
+              })
           }
         })
-        .then(data => {
-          console.log(data)
-          this.groups = data
-        })
-    },
-    // 查询
-    handleSubmit (e) {
-      e.preventDefault()
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values)
-          this.axios
-            .get('/judge/getGroupShowVO', {
-              params: {
-                gameNumber: values.gameNumber,
-                gameRound: values.gameRound
-              }
-            })
-            .then(data => {
-              this.groups = data
-            })
-        }
-      })
+      }
     }
   }
-}
 </script>
 <style>
-.stateOk {
-  background-color: darkseagreen;
-}
-.stateNo {
-  background-color: palevioletred;
-}
+  .stateOk {
+    background-color: darkseagreen;
+  }
+  .stateNo {
+    background-color: palevioletred;
+  }
 </style>
