@@ -11,7 +11,8 @@
     <a-card style="width: 100%;margin: 24px 0">
       <a-row>
         <a-col span="8">
-          场次:<a-select default-value="0" style="width: 240px" v-model="gameNumber">
+          场次:
+          <a-select default-value="0" style="width: 240px" v-model="gameNumber">
             <a-select-option value="1" key="1">
               1
             </a-select-option>
@@ -36,7 +37,8 @@
           </a-select>
         </a-col>
         <a-col span="8">
-          轮次: <a-select default-value="0" style="width: 240px" v-model="gameRound">
+          轮次:
+          <a-select default-value="0" style="width: 240px" v-model="gameRound">
             <a-select-option value="1">
               1
             </a-select-option>
@@ -53,27 +55,56 @@
         </a-col>
       </a-row>
     </a-card>
-    <a-table
-      :columns="columns"
-      :data-source="tempResult"
-      bordered
-      :pagination="false"
-      rowKey="id"
+    <a-card>
+      <a-table
+        :columns="columns"
+        :data-source="tempResult"
+        bordered
+        :pagination="false"
+        rowKey="id"
+      >
+        <span slot="action" slot-scope="text,record">
+          <div v-if="record.flag === 1"><a-icon
+            type="warning"
+            style="color: #ff0000"
+            @click="showChangeDrawer(record.studentId)"
+          ></a-icon></div>
+        </span>
+      </a-table>
+    </a-card>
+
+    <a-modal v-model="visible" title="Basic Modal" @ok="handleOk">
+      <a-table
+        :columns="columnsDetail"
+        :data-source="resultDetail"
+        bordered
+        :pagination="false"
+        rowKey="id"
+        style="background-color: #FFFFFF"
+      >
+      </a-table>
+    </a-modal>
+    <a-drawer
+      title="结果修正"
+      width="100%"
+      :visible="changeResultVisible"
+      :body-style="{ paddingBottom: '80px' }"
+      :destroyOnClose="true"
+      @close="onClose"
     >
-<!--      <span slot="action" slot-scope="text,record">-->
-<!--        <div v-if="record.flag === 1"><a-icon type="warning" style="color: red" @click="detail(record.studentId)"/></div>-->
-<!--      </span>-->
-    </a-table>
-<!--    <a-modal v-model="visible" title="Basic Modal" @ok="handleOk">-->
-<!--      <a-table-->
-<!--        :columns="columnsDetail"-->
-<!--        :data-source="resultDetail"-->
-<!--        bordered-->
-<!--        :pagination="false"-->
-<!--        rowKey="id"-->
-<!--      >-->
-<!--      </a-table>-->
-<!--    </a-modal>-->
+      <a-table
+        :columns="columnsDetail"
+        :data-source="resultDetail"
+        bordered
+        :pagination="false"
+        rowKey="judgeName"
+        style="background-color: #FFFFFF"
+      >
+        <template slot="cent" slot-scope="text, record">
+          <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)"/>
+        </template>
+      </a-table>
+    </a-drawer>
   </div>
 </template>
 
@@ -148,13 +179,67 @@
       key: 'questionStandardName'
     },
     {
+      title: '题目',
+      dataIndex: 'questionName',
+      key: 'questionName'
+    },
+    {
       title: '得分',
       dataIndex: 'cent',
-      key: 'cent'
+      scopedSlots: { customRender: 'cent' }
     }
   ]
-
+  const EditableCell = {
+    template: `
+      <div class="editable-cell">
+        <div v-if="editable" class="editable-cell-input-wrapper">
+          <a-input :value="value" @change="handleChange" @pressEnter="check" style="width: 60px"/>
+          <a-icon
+            type="check"
+            class="editable-cell-icon-check"
+            @click="check"
+          />
+        </div>
+        <div v-else class="editable-cell-text-wrapper">
+          {{ value || ' ' }}
+          <a-icon type="edit" class="editable-cell-icon" @click="edit"/>
+        </div>
+      </div>
+    `,
+    props: {
+      id: Number,
+      text: Number
+    },
+    data () {
+      return {
+        value: this.text,
+        editable: false
+      }
+    },
+    methods: {
+      handleChange (e) {
+        const value = e.target.value
+        console.log(value)
+        console.log(typeof (value))
+        this.value = value
+      },
+      check () {
+        console.log('check', this.value, this.id)
+        this.axios.get('/test-result/editCent?id=' + this.id + '&cent=' + this.value).then(() => {
+          this.editable = false
+          // 转换成Number
+          this.$emit('change', this.value * 1)
+        })
+      },
+      edit () {
+        this.editable = true
+      }
+    }
+  }
   export default {
+    components: {
+      EditableCell
+    },
     data () {
       return {
         columns,
@@ -163,7 +248,8 @@
         gameRound: 0,
         resultDetail: [],
         tempResult: [],
-        visible: false
+        visible: false,
+        changeResultVisible: false
       }
     },
     methods: {
@@ -186,11 +272,70 @@
       handleOk (e) {
         console.log(e)
         this.visible = false
+      },
+      showChangeDrawer (studentId) {
+        this.changeResultVisible = true
+        this.axios.get('/test-result/getResultByStudentCode?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound + '&studentId=' + studentId).then(data => {
+          this.resultDetail = data
+        })
+      },
+      onClose () {
+        this.changeResultVisible = false
+      },
+      onCellChange (key, dataIndex, value) {
+        const dataSource = [...this.resultDetail]
+        const target = dataSource.find(item => item.key === key)
+        if (target) {
+          target[dataIndex] = value
+          this.resultDetail = dataSource
+        }
+        console.log(this.resultDetail)
       }
     }
   }
 </script>
 
 <style scoped>
+  .editable-cell {
+    position: relative;
+  }
 
+  .editable-cell-input-wrapper,
+  .editable-cell-text-wrapper {
+    padding-right: 24px;
+  }
+
+  .editable-cell-text-wrapper {
+    padding: 5px 24px 5px 5px;
+  }
+
+  .editable-cell-icon,
+  .editable-cell-icon-check {
+    position: absolute;
+    right: 0;
+    width: 20px;
+    cursor: pointer;
+  }
+
+  .editable-cell-icon {
+    line-height: 18px;
+    display: none;
+  }
+
+  .editable-cell-icon-check {
+    line-height: 28px;
+  }
+
+  .editable-cell:hover .editable-cell-icon {
+    display: inline-block;
+  }
+
+  .editable-cell-icon:hover,
+  .editable-cell-icon-check:hover {
+    color: #108ee9;
+  }
+
+  .editable-add-btn {
+    margin-bottom: 8px;
+  }
 </style>

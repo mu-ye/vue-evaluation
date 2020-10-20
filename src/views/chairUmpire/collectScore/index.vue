@@ -1,7 +1,6 @@
 <template>
   <div>
-    <a-row>
-      <a-col span="24">
+    <a-card>
         <a-table
           :columns="columns"
           :data-source="finalResult"
@@ -10,9 +9,7 @@
           rowKey="studentCode"
           size="small">
         </a-table>
-      </a-col>
-
-    </a-row>
+    </a-card>
   </div>
 </template>
 
@@ -25,8 +22,8 @@
     },
     {
       title: '学生编号',
-      dataIndex: 'studentCode',
-      key: 'studentCode'
+      dataIndex: 'studentId',
+      key: 'studentId'
     },
     {
       title: '学生姓名',
@@ -34,9 +31,24 @@
       key: 'studentName'
     },
     {
-      title: '实操得分',
+      title: '公司',
+      dataIndex: 'companyName',
+      key: 'companyName'
+    },
+    {
+      title: '实操成绩',
       dataIndex: 'result',
       key: 'result'
+    },
+    {
+      title: '理论成绩',
+      dataIndex: 'computerTestResult',
+      key: 'computerTestResult'
+    },
+    {
+      title: '综合成绩',git
+      dataIndex: 'comprehensiveResult',
+      key: 'comprehensiveResult'
     }
   ]
 
