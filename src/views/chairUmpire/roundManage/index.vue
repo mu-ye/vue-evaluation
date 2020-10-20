@@ -33,22 +33,23 @@
         <a-card size="small">
           <a-row style="margin-top: 18px">
             <a-col :span="10" :offset="1">
-              <a-table
-                :columns="studentColumns"
-                :data-source="studentData"
-                bordered
-                :pagination="false"
-                rowKey="code"
-              ></a-table>
+              <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
+                <span slot="studentAction" slot-scope="text, record">
+                  <div v-if="record.state === 0" style="color:blue;">考生候考</div>
+                  <div v-if="record.state === 1" style="color: green">考生就绪</div>
+                  <div v-if="record.state === 2" style="color: white">考试中</div>
+                  <div v-if="record.state === 3">比赛中断</div>
+                  <div v-if="record.state === 4">比赛结束</div>
+                </span>
+              </a-table>
             </a-col>
             <a-col :span="10" :offset="2">
-              <a-table
-                :columns="judgeColumns"
-                :data-source="judgeData"
-                bordered
-                :pagination="false"
-                rowKey="code"
-              ></a-table>
+              <a-table :columns="judgeColumns" :data-source="judgeData" bordered :pagination="false" rowKey="code">
+                <span slot="judgeAction" slot-scope="text, record">
+                  <div v-if="record.state === 0" style="color: red;">未就绪</div>
+                  <div v-if="record.state === 1" style="color: green">已就绪</div>
+                </span>
+              </a-table>
             </a-col>
           </a-row>
         </a-card>
@@ -82,7 +83,7 @@ const studentColumns = [
   {
     title: '考生就绪状态',
     className: 'state',
-    dataIndex: 'state'
+    scopedSlots: { customRender: 'studentAction' }
   }
 ]
 const judgeColumns = [
@@ -94,7 +95,7 @@ const judgeColumns = [
   {
     title: '裁判就绪状态',
     className: 'state',
-    dataIndex: 'state'
+    scopedSlots: { customRender: 'judgeAction' }
   }
 ]
 const questionColumns = [
