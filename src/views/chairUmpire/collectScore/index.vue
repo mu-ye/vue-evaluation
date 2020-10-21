@@ -1,14 +1,14 @@
 <template>
   <div>
     <a-card>
-        <a-table
-          :columns="columns"
-          :data-source="finalResult"
-          bordered
-          :pagination="false"
-          rowKey="studentCode"
-          size="small">
-        </a-table>
+      <a-table
+        :columns="columns"
+        :data-source="finalResult"
+        bordered
+        :pagination="false"
+        rowKey="studentCode"
+        size="small">
+      </a-table>
     </a-card>
   </div>
 </template>
@@ -46,7 +46,7 @@
       key: 'computerTestResult'
     },
     {
-      title: '综合成绩',git
+      title: '综合成绩',
       dataIndex: 'comprehensiveResult',
       key: 'comprehensiveResult'
     }
