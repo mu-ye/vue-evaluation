@@ -81,7 +81,7 @@ export default {
           // 抽签按钮可用
           this.drawFlag = true
         } else {
-          this.axios.get('/seat-draw/getSeatDrawList').then(data => {
+          this.axios.get('/seatDraw/getSeatDrawList').then(data => {
             this.drawSeatResult = data
             this.drawFlag = false
           })

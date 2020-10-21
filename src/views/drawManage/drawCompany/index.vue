@@ -9,7 +9,7 @@
         </div>
       </a-col>
       <a-col :span="8">
-        <div style="text-align: center">
+        <div style="text-align: center; margin-top: 50px">
           <a-button :disabled="!drawFlag" type="primary" @click="startDraw">开始抽签</a-button>
         </div>
       </a-col>
@@ -45,7 +45,6 @@ const columns = [
     key: 'name'
   }
 ]
-
 export default {
   data () {
     return {

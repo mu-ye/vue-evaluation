@@ -30,6 +30,10 @@
       bordered
       style="margin-top: 10px"
     >
+      <span slot="action" slot-scope="record">
+        <div v-if="record.state === 1" class="success">可以抽签</div>
+        <div v-if="record.state === 0" class="error">不可以抽签</div>
+      </span>
     </a-table>
   </div>
 </template>
@@ -47,8 +51,8 @@ const columns = [
   },
   {
     title: '状态',
-    dataIndex: 'stateName',
-    key: 'stateName'
+    key: 'state',
+    scopedSlots: { customRender: 'action' }
   }
 ]
 
@@ -96,3 +100,17 @@ export default {
   }
 }
 </script>
+<style>
+  .success {
+    color: #52c41a;
+  }
+  .error {
+    color: #ff4d4f;
+  }
+  .link {
+    color: #1890ff;
+  }
+  .warning {
+    color: #faad14;
+  }
+</style>
