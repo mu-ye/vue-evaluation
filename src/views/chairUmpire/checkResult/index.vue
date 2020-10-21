@@ -68,22 +68,14 @@
             type="warning"
             style="color: #ff0000"
             @click="showChangeDrawer(record.studentId)"
-          ></a-icon></div>
+          ></a-icon>
+          </div>
+          <div v-else>
+            <a-button type="primary" size="small" @click="showDrawer(record.studentId)">详情</a-button>
+          </div>
         </span>
       </a-table>
     </a-card>
-
-    <a-modal v-model="visible" title="Basic Modal" @ok="handleOk">
-      <a-table
-        :columns="columnsDetail"
-        :data-source="resultDetail"
-        bordered
-        :pagination="false"
-        rowKey="id"
-        style="background-color: #FFFFFF"
-      >
-      </a-table>
-    </a-modal>
     <a-drawer
       title="结果修正"
       width="100%"
@@ -97,12 +89,30 @@
         :data-source="resultDetail"
         bordered
         :pagination="false"
-        rowKey="judgeName"
+        rowKey="id"
         style="background-color: #FFFFFF"
       >
         <template slot="cent" slot-scope="text, record">
           <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)"/>
         </template>
+      </a-table>
+    </a-drawer>
+    <a-drawer
+      title="详细打分结果"
+      width="100%"
+      :visible="resultVisible"
+      :body-style="{ paddingBottom: '80px' }"
+      :destroyOnClose="true"
+      @close="onClose"
+    >
+      <a-table
+        :columns="columnsDetail"
+        :data-source="resultDetail"
+        bordered
+        :pagination="false"
+        rowKey="id"
+        style="background-color: #FFFFFF"
+      >
       </a-table>
     </a-drawer>
   </div>
@@ -249,7 +259,8 @@
         resultDetail: [],
         tempResult: [],
         visible: false,
-        changeResultVisible: false
+        changeResultVisible: false,
+        resultVisible: false
       }
     },
     methods: {
@@ -279,8 +290,15 @@
           this.resultDetail = data
         })
       },
+      showDrawer (studentId) {
+        this.resultVisible = true
+        this.axios.get('/test-result/getResultByStudentCode?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound + '&studentId=' + studentId).then(data => {
+          this.resultDetail = data
+        })
+      },
       onClose () {
         this.changeResultVisible = false
+        this.resultVisible = false
       },
       onCellChange (key, dataIndex, value) {
         const dataSource = [...this.resultDetail]
