@@ -8,7 +8,7 @@
 
     <div v-if="!drawResult">
       <a-row :gutter="16">
-        <a-col class="gutter-row" :span="12" v-for="item in groups" :key="item.groupName">
+        <a-col class="gutter-row" :span="12" v-for="item in groups.groupShowVOList" :key="item.groupName">
           <div class="gutter-box">
             <a-card hoverable :bordered="true" style="margin-top: 20px">
               <p style="text-align: center">
@@ -54,19 +54,24 @@ export default {
   },
   methods: {
     init () {
-      // 查看状态
+      // 查看状态  0: 不可以抽签，不显示结果   1：可以抽签
       this.axios.get('/drawState/getStateById?id=5').then(data => {
+        console.log('---- :' + data)
         if (data === 1) {
-          console.log(data)
           // 抽签按钮可用
           this.drawResult = true
         } else {
-          this.axios.get('/judge/getGroupJudgeVO').then(data => {
-            this.drawResult = false
-            console.log(data)
-            this.groups = data
-          })
+          // 显示抽签结果
+          this.getGroupJudgeVO()
         }
+      })
+    },
+    // 显示抽签结果
+    getGroupJudgeVO () {
+      this.axios.get('/judge/getGroupJudgeVO').then(data => {
+        this.drawResult = false
+        console.log(data)
+        this.groups = data
       })
     },
 

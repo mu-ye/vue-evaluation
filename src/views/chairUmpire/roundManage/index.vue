@@ -35,8 +35,8 @@
             <a-col :span="10" :offset="1">
               <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
                 <span slot="studentAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color:blue;">考生候考</div>
-                  <div v-if="record.state === 1" style="color: green">考生就绪</div>
+                  <div v-if="record.state === 0" style="color:blue;">未就绪</div>
+                  <div v-if="record.state === 1" style="color: green">已就绪</div>
                   <div v-if="record.state === 2" style="color: white">考试中</div>
                   <div v-if="record.state === 3">比赛中断</div>
                   <div v-if="record.state === 4">比赛结束</div>
@@ -228,6 +228,13 @@ export default {
         this.issueState = true
       })
     }
+  },
+  destroyed () {
+    // 页面销毁时结束轮询
+    clearInterval(this.studentTimer)
+    clearInterval(this.judgeTimer)
+    clearInterval(this.stateTimer)
+    clearInterval(this.questionTimer)
   }
 }
 </script>
