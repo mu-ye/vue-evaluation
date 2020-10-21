@@ -1,18 +1,24 @@
 <template>
   <div>
+    <button onclick="test()">测试</button>
     <a-modal
       :visible="visible"
       :confirm-loading="confirmLoading"
       @ok="handleOk(signInfo.id)"
       @cancel="handleCancel"
       okText="确认"
+      cancelText="取消"
+      :maskClosable="false"
+      :keyboard="false"
     >
       <a-descriptions :title="title" size="small" layout="vertical" bordered>
-        <a-descriptions-item label="照片" span="3" style="text-align: center">
+        <a-descriptions-item label="照片" span="3" >
+          <div style="width: 100%;text-align: center">
           <img
-            style="width:50px; heigth:50px"
-            src="/api/file/"
+            style="width:50px; height:50px;"
+            :src= signInfo.url
           />
+          </div>
         </a-descriptions-item>
         <a-descriptions-item label="编号">
           {{ signInfo.code }}
@@ -29,7 +35,6 @@
         <a-descriptions-item label="公司名称">
           {{ signInfo.companyName }}
         </a-descriptions-item>
-
         <a-descriptions-item label="手机">
           {{ signInfo.phone }}
         </a-descriptions-item>
@@ -51,7 +56,8 @@
           age: 0,
           idCard: '',
           companyName: '',
-          phone: ''
+          phone: '',
+          url: ''
         },
         confirmLoading: false,
         visible: false,
@@ -103,6 +109,7 @@
       },
       handleCancel (e) {
         console.log('Clicked cancel button')
+        this.timer = setInterval(this.test, 1000)
         this.visible = false
       },
       sign () {

@@ -1,13 +1,16 @@
 <template>
   <div>
+    <a-button @click="exportExcel()">导出excel</a-button>
     <a-card>
       <a-table
         :columns="columns"
         :data-source="finalResult"
         bordered
         :pagination="false"
-        rowKey="studentCode"
-        size="small">
+        rowKey="studentId"
+        @change="onChange"
+        size="small"
+      >
       </a-table>
     </a-card>
   </div>
@@ -15,11 +18,11 @@
 
 <script>
   const columns = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id'
-    },
+    // {
+    //   title: 'id',
+    //   dataIndex: 'id',
+    //   key: 'id'
+    // },
     {
       title: '学生编号',
       dataIndex: 'studentId',
@@ -48,9 +51,15 @@
     {
       title: '综合成绩',
       dataIndex: 'comprehensiveResult',
-      key: 'comprehensiveResult'
+      key: 'comprehensiveResult',
+      defaultSortOrder: 'descend',
+      sorter: (a, b) => a.comprehensiveResult - b.comprehensiveResult
     }
   ]
+
+  function onChange (pagination, filters, sorter) {
+    console.log('params', pagination, filters, sorter)
+  }
 
   export default {
     data () {
@@ -70,6 +79,10 @@
           console.log(data)
           this.finalResult = data
         })
+      },
+      onChange,
+      exportExcel () {
+        window.open('/njdt/test-result/exportExcel')
       }
     }
   }
