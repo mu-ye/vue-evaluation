@@ -1,17 +1,15 @@
 <template>
-    <div style="text-align: center;padding-top: 200px" >
-      <a-spin :spinning="loading">
-        <pdf
-          v-for="i in numPages"
-          :key="i"
-          :src="src"
-          :page="i"
-          @page-loaded="loadPage"
-          @error="error"
-        />
-      </a-spin>
-    </div>
-
+  <div style="text-align: center;padding-top: 200px">
+    <a-spin :spinning="loading">
+      <pdf
+        v-for="i in numPages"
+        :key="i"
+        :src="src"
+        :page="i"
+        @page-loaded="loadPage"
+        @error="error" />
+    </a-spin>
+  </div>
 </template>
 
 <script>

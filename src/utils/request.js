@@ -8,7 +8,6 @@ const request = axios.create({
   baseURL: '/njdt',
   timeout: 6000 // 请求超时时间
 })
-
 // 异常拦截处理器
 const errorHandler = error => {
   const { name, response } = error
@@ -57,7 +56,8 @@ request.interceptors.response.use(response => {
   // data success data error
   if (data.success === false) {
     // 抛出错误到 errorHandler 中处理
-    const error = new Error(data.errorMessage || '操作失败')
+    const error = new Error(data.errorMessage || '操作失' +
+      '败')
     error.name = 'BizError'
     error.data = data
     message.error(data.errorMessage || '操作失败')

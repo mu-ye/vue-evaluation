@@ -35,11 +35,19 @@
             <a-col :span="10" :offset="1">
               <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
                 <span slot="studentAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color:blue;">未就绪</div>
+                  <div v-if="record.state === 0" style="color:red;">未就绪</div>
                   <div v-if="record.state === 1" style="color: green">已就绪</div>
                   <div v-if="record.state === 2" style="color: white">考试中</div>
                   <div v-if="record.state === 3">比赛中断</div>
                   <div v-if="record.state === 4">比赛结束</div>
+                  <div v-if="record.state === 5" style="color:red;">考生缺考</div>
+                </span>
+                <span slot="studentMissAction" slot-scope="text, record">
+                  <div v-if="record.state === 0">
+                    <a-button type="primary" @click="studentMiss(record.id)">
+                      考生缺考
+                    </a-button>
+                  </div>
                 </span>
               </a-table>
             </a-col>
@@ -76,6 +84,11 @@
 <script>
 const studentColumns = [
   {
+    title: 'id',
+    className: 'id',
+    dataIndex: 'id'
+  },
+  {
     title: '考生姓名',
     className: 'name',
     dataIndex: 'name'
@@ -84,6 +97,11 @@ const studentColumns = [
     title: '考生就绪状态',
     className: 'state',
     scopedSlots: { customRender: 'studentAction' }
+  },
+  {
+    title: '修改考生状态',
+    className: 'state',
+    scopedSlots: { customRender: 'studentMissAction' }
   }
 ]
 const judgeColumns = [
@@ -189,15 +207,15 @@ export default {
     getStudentData () {
       this.axios.get('/seatDraw/getStudentReadyShowVO').then(data => {
         this.studentData = data
-        if (data === null) {
-          clearInterval(this.studentTimer)
-          clearInterval(this.judgeTimer)
-          clearInterval(this.stateTimer)
-          clearInterval(this.questionTimer)
-          this.$success({
-            title: '比赛全部结束'
-          })
-        }
+        // if (data === null) {
+        //   clearInterval(this.studentTimer)
+        //   clearInterval(this.judgeTimer)
+        //   clearInterval(this.stateTimer)
+        //   clearInterval(this.questionTimer)
+        //   this.$success({
+        //     title: '比赛全部结束'
+        //   })
+        // }
       })
     },
     getJudgeData () {
@@ -226,6 +244,21 @@ export default {
       this.axios.get('/config/doIssue').then(data => {
         this.$message.success('下发试卷试卷成功')
         this.issueState = true
+      })
+    },
+    doStudentMiss (id) {
+      this.axios.get('/seatDraw/beReady?seatDrawId=' + id).then(data => {
+        this.$message.success('修改考生状态成功')
+      })
+    },
+    studentMiss (id) {
+      const that = this
+      this.$confirm({
+        title: '确认缺考?',
+        onOk () {
+          that.doStudentMiss(id)
+        },
+        onCancel () {}
       })
     }
   },
