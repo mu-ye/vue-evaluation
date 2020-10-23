@@ -1,6 +1,5 @@
 <template>
   <div>
-    <button onclick="test()">测试</button>
     <a-modal
       :visible="visible"
       :confirm-loading="confirmLoading"
@@ -14,10 +13,10 @@
       <a-descriptions :title="title" size="small" layout="vertical" bordered>
         <a-descriptions-item label="照片" span="3" >
           <div style="width: 100%;text-align: center">
-          <img
-            style="width:50px; height:50px;"
-            :src= signInfo.url
-          />
+            <img
+              style="width:50px; height:50px;"
+              :src="signInfo.url"
+            />
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="编号">
@@ -35,19 +34,60 @@
         <a-descriptions-item label="公司名称">
           {{ signInfo.companyName }}
         </a-descriptions-item>
-        <a-descriptions-item label="手机">
-          {{ signInfo.phone }}
+        <!--        <a-descriptions-item label="手机">-->
+        <!--          {{ signInfo.phone }}-->
+        <!--        </a-descriptions-item>-->
+        <a-descriptions-item label="考位">
+          <b> {{ signInfo.seatInfo }}</b>
         </a-descriptions-item>
       </a-descriptions>
     </a-modal>
+
+    <a-card title="本场考试人员信息">
+      <a-table
+        :columns="columns"
+        :data-source="signTwoData"
+        :pagination="false"
+        style="margin-top: 10px"
+        size="small"
+      ></a-table>
+    </a-card>
   </div>
 </template>
 
 <script>
+  const columns = [
+    {
+      title: '所属单位',
+      dataIndex: 'companyName',
+      key: 'companyName'
+    },
+    {
+      title: '编码',
+      dataIndex: 'code',
+      key: 'code'
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: '身份证号',
+      dataIndex: 'idCard',
+      key: 'idCard'
+    },
+    {
+      title: '考位',
+      dataIndex: 'seatId',
+      key: 'seatId'
+    }
+  ]
   export default {
     name: 'QrSign',
     data () {
       return {
+        columns,
         timer: null,
         title: null,
         signInfo: {
@@ -57,11 +97,13 @@
           idCard: '',
           companyName: '',
           phone: '',
-          url: ''
+          url: '',
+          seatInfo: ''
         },
         confirmLoading: false,
         visible: false,
-        idList: []
+        idList: [],
+        signTwoData: []
       }
     },
     mounted () {
@@ -94,6 +136,10 @@
             }
           }
         )
+        this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
+          this.signTwoData = data
+          console.log(data)
+        })
       },
       showModal () {
         this.visible = true
