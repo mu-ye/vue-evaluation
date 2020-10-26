@@ -4,50 +4,29 @@
     <a-card style="margin-top: 10px">
       <a-table
         :columns="columns"
-        :data-source="finalResult"
+        :data-source="companyResult"
         bordered
         :pagination="false"
-        rowKey="studentId"
+        rowKey="id"
         @change="onChange"
         size="small"
       >
       </a-table>
-      <div style="text-align: center;margin-top: 10px"><a-button type="primary" @click="saveResult">保存计算结果</a-button></div>
     </a-card>
   </div>
 </template>
 
 <script>
   const columns = [
-    // {
-    //   title: 'id',
-    //   dataIndex: 'id',
-    //   key: 'id'
-    // },
     {
-      title: '学生编号',
-      dataIndex: 'studentId',
-      key: 'studentId'
-    },
-    {
-      title: '学生姓名',
-      dataIndex: 'studentName',
-      key: 'studentName'
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id'
     },
     {
       title: '公司',
       dataIndex: 'companyName',
       key: 'companyName'
-    },
-    {
-      title: '实操成绩',
-      dataIndex: 'result',
-      key: 'result'
-    },
-    {
-      title: '理论成绩',
-      dataIndex: 'computerTestResult',
-      key: 'computerTestResult'
     },
     {
       title: '综合成绩',
@@ -66,29 +45,22 @@
     data () {
       return {
         columns,
-        gameNumber: 0,
-        gameRound: 0,
-        finalResult: []
+        companyResult: []
       }
     },
     mounted () {
-    this.init()
-      },
+      this.init()
+    },
     methods: {
       init () {
-        this.axios.get('/test-result/getFinalResult').then(data => {
+        this.axios.get('/test-final-result/getCompanyResult').then(data => {
           console.log(data)
-          this.finalResult = data
+          this.companyResult = data
         })
       },
       onChange,
       exportExcel () {
         window.open('/njdt/test-result/exportExcel')
-      },
-      saveResult () {
-        this.axios.post('/test-final-result/saveResult', this.finalResult).then(() => {
-
-        })
       }
     }
   }

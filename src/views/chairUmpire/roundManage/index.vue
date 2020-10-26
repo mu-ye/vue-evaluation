@@ -35,13 +35,12 @@
             <a-col :span="10" :offset="1">
               <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
                 <span slot="studentAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color:red;"><b>未就绪</b></div>
-                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
-                  <div v-if="record.state === 2" style="color: black"><b>考试中</b></div>
-                  <div v-if="record.state === 3"><b>比赛中断</b></div>
-                  <div v-if="record.state === 4"><b>比赛结束</b></div>
-                  <div v-if="record.state === 5" style="color:red;"><b>缺考</b></div>
-                  <div v-if="record.state === 6" style="color:red;"><b>违纪</b></div>
+                  <div v-if="record.state === 0" style="color:red;">未就绪</div>
+                  <div v-if="record.state === 1" style="color: green">已就绪</div>
+                  <div v-if="record.state === 2" style="color: black">考试中</div>
+                  <div v-if="record.state === 3">比赛中断</div>
+                  <div v-if="record.state === 4">比赛结束</div>
+                  <div v-if="record.state === 5" style="color:red;">考生缺考</div>
                 </span>
                 <span slot="studentMissAction" slot-scope="text, record">
                   <div v-if="record.state === 0">
