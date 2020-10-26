@@ -12,7 +12,7 @@
       <a-row>
         <a-col span="8">
           场次:
-          <a-select default-value="0" style="width: 240px" v-model="gameNumber">
+          <a-select default-value="1" style="width: 240px" v-model="gameNumber">
             <a-select-option value="1" key="1">
               1
             </a-select-option>
@@ -38,7 +38,7 @@
         </a-col>
         <a-col span="8">
           轮次:
-          <a-select default-value="0" style="width: 240px" v-model="gameRound">
+          <a-select default-value="1" style="width: 240px" v-model="gameRound">
             <a-select-option value="1">
               1
             </a-select-option>
@@ -84,18 +84,38 @@
       :destroyOnClose="true"
       @close="onClose"
     >
-      <a-table
-        :columns="columnsDetail"
-        :data-source="resultDetail"
-        bordered
-        :pagination="false"
-        rowKey="id"
-        style="background-color: #FFFFFF"
-      >
-        <template slot="cent" slot-scope="text, record">
-          <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)"/>
-        </template>
-      </a-table>
+      <a-row>
+        <a-col span="16">
+          <a-table
+            :columns="columnsDetailOne"
+            :data-source="resultDetailOne"
+            bordered
+            :pagination="false"
+            rowKey="id"
+            style="background-color: #FFFFFF"
+            size="small"
+          >
+            <template slot="cent" slot-scope="text, record">
+              <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)"/>
+            </template>
+          </a-table>
+        </a-col>
+        <a-col span="8">
+          <a-table
+            :columns="columnsDetailTwo"
+            :data-source="resultDetailTwo"
+            bordered
+            :pagination="false"
+            rowKey="id"
+            style="background-color: #FFFFFF"
+            size="small"
+          >
+            <template slot="cent" slot-scope="text, record">
+              <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)"/>
+            </template>
+          </a-table>
+        </a-col>
+      </a-row>
     </a-drawer>
     <a-drawer
       title="详细打分结果"
@@ -105,15 +125,32 @@
       :destroyOnClose="true"
       @close="onClose"
     >
-      <a-table
-        :columns="columnsDetail"
-        :data-source="resultDetail"
-        bordered
-        :pagination="false"
-        rowKey="id"
-        style="background-color: #FFFFFF"
-      >
-      </a-table>
+      <a-row>
+        <a-col span="16">
+          <a-table
+            :columns="columnsDetailOne"
+            :data-source="resultDetailOne"
+            bordered
+            :pagination="false"
+            rowKey="id"
+            style="background-color: #FFFFFF"
+            size="small"
+          >
+          </a-table>
+        </a-col>
+        <a-col span="8">
+          <a-table
+            :columns="columnsDetailTwo"
+            :data-source="resultDetailTwo"
+            bordered
+            :pagination="false"
+            rowKey="id"
+            style="background-color: #FFFFFF"
+            size="small"
+          >
+          </a-table>
+        </a-col>
+      </a-row>
     </a-drawer>
   </div>
 </template>
@@ -141,7 +178,7 @@
       key: 'judgeId'
     },
     {
-      title: '裁判姓名',
+      title: '裁判',
       dataIndex: 'judgeName',
       key: 'judgeName'
     },
@@ -157,7 +194,7 @@
       align: 'center'
     }
   ]
-  const columnsDetail = [
+  const columnsDetailOne = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -169,10 +206,52 @@
       key: 'studentCode'
     },
     {
-      title: '学生姓名',
+      title: '考生',
       dataIndex: 'studentName',
       key: 'studentName'
     },
+    // {
+    //   title: '裁判Id',
+    //   dataIndex: 'judgeId',
+    //   key: 'judgeId'
+    // },
+    {
+      title: '题目',
+      dataIndex: 'questionName',
+      key: 'questionName'
+    },
+    {
+      title: '打分项',
+      dataIndex: 'questionStandardName',
+      key: 'questionStandardName'
+    },
+    {
+      title: '裁判',
+      dataIndex: 'judgeName',
+      key: 'judgeName'
+    },
+    {
+      title: '得分',
+      dataIndex: 'cent',
+      scopedSlots: { customRender: 'cent' }
+    }
+  ]
+  const columnsDetailTwo = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id'
+    },
+    // {
+    //   title: '学生编号',
+    //   dataIndex: 'studentCode',
+    //   key: 'studentCode'
+    // },
+    // {
+    //   title: '学生姓名',
+    //   dataIndex: 'studentName',
+    //   key: 'studentName'
+    // },
     // {
     //   title: '裁判Id',
     //   dataIndex: 'judgeId',
@@ -183,16 +262,16 @@
       dataIndex: 'judgeName',
       key: 'judgeName'
     },
-    {
-      title: '打分项',
-      dataIndex: 'questionStandardName',
-      key: 'questionStandardName'
-    },
-    {
-      title: '题目',
-      dataIndex: 'questionName',
-      key: 'questionName'
-    },
+    // {
+    //   title: '题目',
+    //   dataIndex: 'questionName',
+    //   key: 'questionName'
+    // },
+    // {
+    //   title: '打分项',
+    //   dataIndex: 'questionStandardName',
+    //   key: 'questionStandardName'
+    // },
     {
       title: '得分',
       dataIndex: 'cent',
@@ -211,7 +290,7 @@
           />
         </div>
         <div v-else class="editable-cell-text-wrapper">
-          {{ value || ' ' }}
+          {{ value || '0' }}
           <a-icon type="edit" class="editable-cell-icon" @click="edit"/>
         </div>
       </div>
@@ -253,10 +332,12 @@
     data () {
       return {
         columns,
-        columnsDetail,
-        gameNumber: 0,
-        gameRound: 0,
-        resultDetail: [],
+        columnsDetailOne,
+        columnsDetailTwo,
+        gameNumber: 1,
+        gameRound: 1,
+        resultDetailOne: [],
+        resultDetailTwo: [],
         tempResult: [],
         visible: false,
         changeResultVisible: false,
@@ -286,14 +367,24 @@
       },
       showChangeDrawer (studentId) {
         this.changeResultVisible = true
+        // this.axios.get('/test-result/getResultByStudentCode?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound + '&studentId=' + studentId).then(data => {
+        //   this.resultDetail = data
+        // })
         this.axios.get('/test-result/getResultByStudentCode?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound + '&studentId=' + studentId).then(data => {
-          this.resultDetail = data
+          console.log(data)
+          this.resultDetailOne = data.testResultDetailVOListOne
+          this.resultDetailTwo = data.testResultDetailVOListTwo
         })
       },
       showDrawer (studentId) {
         this.resultVisible = true
+        // this.axios.get('/test-result/getResultByStudentCode?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound + '&studentId=' + studentId).then(data => {
+        //   this.resultDetail = data
+        // })
         this.axios.get('/test-result/getResultByStudentCode?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound + '&studentId=' + studentId).then(data => {
-          this.resultDetail = data
+          console.log(data)
+          this.resultDetailOne = data.testResultDetailVOListOne
+          this.resultDetailTwo = data.testResultDetailVOListTwo
         })
       },
       onClose () {

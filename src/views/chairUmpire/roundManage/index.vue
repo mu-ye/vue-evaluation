@@ -37,7 +37,7 @@
                 <span slot="studentAction" slot-scope="text, record">
                   <div v-if="record.state === 0" style="color:red;">未就绪</div>
                   <div v-if="record.state === 1" style="color: green">已就绪</div>
-                  <div v-if="record.state === 2" style="color: white">考试中</div>
+                  <div v-if="record.state === 2" style="color: black">考试中</div>
                   <div v-if="record.state === 3">比赛中断</div>
                   <div v-if="record.state === 4">比赛结束</div>
                   <div v-if="record.state === 5" style="color:red;">考生缺考</div>

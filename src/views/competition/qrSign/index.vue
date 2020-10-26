@@ -42,16 +42,17 @@
         </a-descriptions-item>
       </a-descriptions>
     </a-modal>
-
-    <a-card title="本场考试人员信息">
-      <a-table
-        :columns="columns"
-        :data-source="signTwoData"
-        :pagination="false"
-        style="margin-top: 10px"
-        size="small"
-      ></a-table>
-    </a-card>
+    <div v-if="signInfo.type == 2">
+      <a-card title="本场考试人员信息">
+        <a-table
+          :columns="columns"
+          :data-source="signTwoData"
+          :pagination="false"
+          style="margin-top: 10px"
+          size="small"
+        ></a-table>
+      </a-card>
+    </div>
   </div>
 </template>
 
@@ -137,8 +138,7 @@
           }
         )
         this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
-          this.signTwoData = data
-          console.log(data)
+          if (data.type === 2) { this.signTwoData = data }
         })
       },
       showModal () {
