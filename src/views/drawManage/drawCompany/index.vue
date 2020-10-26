@@ -1,30 +1,20 @@
 <template>
   <div>
     <a-row>
-      <a-col :span="8" style="text-align: center">
-        <div>
-          <a-card size="small" title="待抽签代表队" style="width: 300px;float: right">
-            <p v-for="(item, key) in forDrawCompany" :key="key">{{ item }}</p>
-          </a-card>
-        </div>
-      </a-col>
-      <a-col :span="8">
+      <a-col :span="2" offset="1">
         <div style="text-align: center; margin-top: 50px">
           <a-button :disabled="!drawFlag" type="primary" @click="startDraw">开始抽签</a-button>
         </div>
       </a-col>
-      <a-col :span="8" style="text-align: center" v-if="!drawFlag">
-        <a-card size="small" title="抽签结果" style="width: 300px">
-          <!--          <p v-for="(item, key) in drawResult" :key="key">{{ item.drawResult }}{{ item.name }} </p>-->
-          <a-table
-            :columns="columns"
-            :data-source="drawResult"
-            bordered
-            :pagination="false"
-            rowKey="drawResult"
-            size="small"
-          ></a-table>
-        </a-card>
+      <a-col :span="19" offset="1" style="text-align: center">
+        <a-table
+          :columns="columns"
+          :data-source="afterDrawCompany"
+          bordered
+          :pagination="false"
+          rowKey="orderOne"
+          size="small"
+        ></a-table>
       </a-col>
     </a-row>
   </div>
@@ -34,21 +24,58 @@
 const columns = [
   {
     title: '顺序',
-    className: 'drawResult',
-    dataIndex: 'drawResult',
-    key: 'drawResult'
+    className: 'orderOne',
+    dataIndex: 'orderOne',
+    key: 'orderOne'
   },
   {
     title: '代表队',
-    className: 'name',
-    dataIndex: 'name',
-    key: 'name'
+    className: 'companyOneName',
+    dataIndex: 'companyOneName',
+    key: 'companyOneName'
+  },
+  {
+    title: '顺序',
+    className: 'orderTwo',
+    dataIndex: 'orderTwo',
+    key: 'orderTwo'
+  },
+  {
+    title: '代表队',
+    className: 'companyTwoName',
+    dataIndex: 'companyTwoName',
+    key: 'companyTwoName'
+  },
+  {
+    title: '顺序',
+    className: 'orderThree',
+    dataIndex: 'orderThree',
+    key: 'orderThree'
+  },
+  {
+    title: '代表队',
+    className: 'companyThreeName',
+    dataIndex: 'companyThreeName',
+    key: 'companyThreeName'
+  },
+  {
+    title: '顺序',
+    className: 'orderFour',
+    dataIndex: 'orderFour',
+    key: 'orderFour'
+  },
+  {
+    title: '代表队',
+    className: 'companyFourName',
+    dataIndex: 'companyFourName',
+    key: 'companyFourName'
   }
 ]
 export default {
   data () {
     return {
       columns,
+      afterDrawCompany: [],
       forDrawCompany: [],
       drawResult: [],
       drawFlag: false
@@ -59,31 +86,20 @@ export default {
   },
   methods: {
     init () {
-      this.axios.get('/company/getHaveSighCompany').then(data => {
-        this.forDrawCompany = data
-      })
       this.axios.get('/drawState/getStateById?id=1').then(data => {
         if (data === 1) {
-          console.log(data)
-          // 抽签按钮可用
           this.drawFlag = true
-        } else {
-          this.axios.get('/company/getCompanyList').then(data => {
-            this.drawResult = data
-            data.sort((a, b) => {
-              return a.drawResult - b.drawResult
-            })
-          })
+          // 显示抽签前的结果
         }
+        this.axios.get('/company/getAfterCompanyList').then(data => {
+          this.afterDrawCompany = data
+        })
       })
     },
     startDraw () {
       this.axios.get('/company/drawCompany').then(data => {
         this.drawFlag = false
-        this.drawResult = data
-        data.sort((a, b) => {
-          return a.drawResult - b.drawResult
-        })
+        this.init()
       })
     }
   }
