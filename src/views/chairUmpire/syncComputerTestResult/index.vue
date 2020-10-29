@@ -5,7 +5,7 @@
         <a-upload
           name="file"
           :multiple="false"
-          action="/api/test-result/readExcel"
+          action="/njdt/test-result/readExcel"
           :headers="headers"
           @change="handleChange"
         >

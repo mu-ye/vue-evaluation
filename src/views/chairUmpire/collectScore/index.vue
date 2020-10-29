@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-button @click="exportExcel()">导出excel</a-button>
+    <a-button @click="exportExcel()">导出excel</a-button> <a-button @click="checkCountCondition()">检验打分结果是否满足计算条件</a-button>
     <a-card style="margin-top: 10px">
       <a-table
         :columns="columns"
@@ -79,6 +79,11 @@
         this.axios.get('/test-result/getFinalResult').then(data => {
           console.log(data)
           this.finalResult = data
+        })
+      },
+      checkCountCondition () {
+        this.axios.get('/test-result/checkCountCondition').then(data => {
+          this.$message.error(data, 10)
         })
       },
       onChange,

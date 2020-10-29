@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="table-operations">
-      <a-button type="primary" @click="showAddDrawer">
-        新增单位
-      </a-button>
-    </div>
+<!--    <div class="table-operations">-->
+<!--      <a-button type="primary" @click="showAddDrawer">-->
+<!--        新增单位-->
+<!--      </a-button>-->
+<!--    </div>-->
     <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false">
       <span slot="action" slot-scope="text, record">
         <a-button type="primary" @click="showDrawer(record)">
           编辑
         </a-button>
-        <a-divider type="vertical" />
-        <a-button type="danger" @click="showConfirm(record.id)">
-          删除
-        </a-button>
+<!--        <a-divider type="vertical" />-->
+<!--        <a-button type="danger" @click="showConfirm(record.id)">-->
+<!--          删除-->
+<!--        </a-button>-->
       </span>
     </a-table>
     <a-drawer title="编辑信息" :width="480" :visible="visible" :body-style="{ paddingBottom: '80px' }" @close="onClose">

@@ -290,7 +290,7 @@
           />
         </div>
         <div v-else class="editable-cell-text-wrapper">
-          {{ value || '0' }}
+          {{ value }}
           <a-icon type="edit" class="editable-cell-icon" @click="edit"/>
         </div>
       </div>
@@ -317,7 +317,7 @@
         this.axios.get('/test-result/editCent?id=' + this.id + '&cent=' + this.value).then(() => {
           this.editable = false
           // 转换成Number
-          this.$emit('change', this.value * 1)
+          // this.$emit('change', this.value * 1)
         })
       },
       edit () {
@@ -392,13 +392,18 @@
         this.resultVisible = false
       },
       onCellChange (key, dataIndex, value) {
-        const dataSource = [...this.resultDetail]
-        const target = dataSource.find(item => item.key === key)
-        if (target) {
-          target[dataIndex] = value
-          this.resultDetail = dataSource
+        const dataSourceOne = [...this.resultDetailOne]
+        const dataSourceTwo = [...this.resultDetailTwo]
+        const targetOne = dataSourceOne.find(item => item.key === key)
+        if (targetOne) {
+          targetOne[dataIndex] = value
+          this.resultDetailOne = dataSourceOne
         }
-        console.log(this.resultDetail)
+        const targetTwo = dataSourceTwo.find(item => item.key === key)
+        if (targetTwo) {
+          targetTwo[dataIndex] = value
+          this.resultDetailTwo = dataSourceTwo
+        }
       }
     }
   }
