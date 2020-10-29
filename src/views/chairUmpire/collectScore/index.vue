@@ -83,7 +83,7 @@
       },
       checkCountCondition () {
         this.axios.get('/test-result/checkCountCondition').then(data => {
-          this.$message.error(data, 0)
+          this.$message.error(data, 10)
         })
       },
       onChange,
