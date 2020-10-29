@@ -97,48 +97,56 @@
 <script>
 const studentColumns = [
   {
-    title: 'id',
-    className: 'id',
-    dataIndex: 'id'
+    title: '考生赛位',
+    className: 'seatName',
+    dataIndex: 'seatName',
+    align: 'center'
   },
   {
     title: '考生编号',
     className: 'code',
-    dataIndex: 'code'
+    dataIndex: 'code',
+    align: 'center'
   },
   {
     title: '状态',
     className: 'state',
-    scopedSlots: { customRender: 'studentAction' }
+    scopedSlots: { customRender: 'studentAction' },
+    align: 'center'
   },
   {
     title: '操作',
     className: 'state',
-    scopedSlots: { customRender: 'studentMissAction' }
+    scopedSlots: { customRender: 'studentMissAction' },
+    align: 'center'
   }
 ]
 const judgeColumns = [
   {
     title: '裁判编号',
     className: 'code',
-    dataIndex: 'code'
+    dataIndex: 'code',
+    align: 'center'
   },
   {
     title: '状态',
     className: 'state',
-    scopedSlots: { customRender: 'judgeAction' }
+    scopedSlots: { customRender: 'judgeAction' },
+    align: 'center'
   }
 ]
 const questionColumns = [
   {
     title: '题目类型',
     className: 'gameType',
-    dataIndex: 'gameType'
+    dataIndex: 'gameType',
+    align: 'center'
   },
   {
     title: '题目名称',
     className: 'name',
-    dataIndex: 'name'
+    dataIndex: 'name',
+    align: 'center'
   }
 ]
 export default {
