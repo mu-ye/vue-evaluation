@@ -10,7 +10,6 @@
   >
     <template v-slot:menuHeaderRender>
       <div>
-        <logo-svg />
         <h1>{{ title }}</h1>
       </div>
     </template>
@@ -18,7 +17,7 @@
       <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>
     <template v-slot:footerRender>
-      <global-footer />
+      <div/>
     </template>
     <router-view />
   </pro-layout>
@@ -29,15 +28,11 @@ import { updateTheme } from '@ant-design-vue/pro-layout'
 import { mapState } from 'vuex'
 import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
-import GlobalFooter from '@/components/GlobalFooter'
-import LogoSvg from '../assets/logo.svg?inline'
 
 export default {
   name: 'BasicLayout',
   components: {
-    RightContent,
-    GlobalFooter,
-    LogoSvg
+    RightContent
   },
   data () {
     return {
@@ -156,4 +151,8 @@ export default {
     }
   }
 }
+
+.ant-layout-footer {
+    display: none;
+  }
 </style>

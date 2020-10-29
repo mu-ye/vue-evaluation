@@ -3,25 +3,13 @@
     <div class="container">
       <div class="top">
         <div class="header">
-          <a href="/">
-            <img src="~@/assets/logo.svg" class="logo" alt="南京地铁运营有限责任公司" />
-            <span class="title">国赛考评系统</span>
-          </a>
+          <span class="title">国赛考评系统</span>
         </div>
         <div class="desc">
           全国城市轨道交通行业职业技能竞赛城市轨道交通通信工技能竞赛
         </div>
       </div>
       <router-view />
-      <div class="footer">
-        <div class="links">
-          <img src="~@/assets/logo.svg" class="logo" alt="南京地铁运营有限责任公司" />
-          <img src="~@/assets/maker.png" class="logo" alt="电子及信息技术研究院" />
-        </div>
-        <div class="copyright">
-          Copyright &copy; 2020 电子及信息技术研究院
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -71,13 +59,6 @@ export default {
           opacity: 0.8;
         }
 
-        .logo {
-          height: 44px;
-          vertical-align: top;
-          margin-right: 16px;
-          border-style: none;
-        }
-
         .title {
           font-size: 33px;
           color: rgba(0, 0, 0, 0.85);
@@ -100,31 +81,6 @@ export default {
       min-width: 260px;
       width: 368px;
       margin: 0 auto;
-    }
-
-    .footer {
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-      padding: 0 16px;
-      margin: 48px 0 24px;
-      text-align: center;
-
-      .links {
-        margin-bottom: 8px;
-        font-size: 14px;
-        .logo {
-          height: 18px;
-          &:not(:last-child) {
-            margin-right: 24px;
-          }
-        }
-      }
-
-      .copyright {
-        color: rgba(0, 0, 0, 0.45);
-        font-size: 14px;
-      }
     }
   }
 }
