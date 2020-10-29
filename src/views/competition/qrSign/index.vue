@@ -28,7 +28,7 @@
             </div>
           </a-descriptions-item>
           <a-descriptions-item label="编号">
-           <p style="font-size: 24px"> {{ signInfo.code }}</p>
+            <p style="font-size: 24px"> {{ signInfo.code }}</p>
           </a-descriptions-item>
           <!--        <a-descriptions-item label="姓名">-->
           <!--          {{ signInfo.name }}-->
@@ -161,7 +161,7 @@
           }
         )
         this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
-          if (data.type === 2) { this.signTwoData = data }
+          if (this.signInfo.type === 2) { this.signTwoData = data }
         })
       },
       showModal () {

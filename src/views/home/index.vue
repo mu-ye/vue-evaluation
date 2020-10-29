@@ -35,19 +35,40 @@
             <a-col :span="10" :offset="1">
               <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
                 <span slot="studentAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" class="colorError">未就绪</div>
-                  <div v-if="record.state === 1" class="success">已就绪</div>
-                  <div v-if="record.state === 2" class="link">考试中</div>
-                  <div v-if="record.state === 3" class="warning">考试中断</div>
-                  <div v-if="record.state === 4">比赛结束</div>
+                  <div v-if="record.state === 0" style="color:red;"><b>未就绪</b></div>
+                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
+                  <div v-if="record.state === 2" style="color: black"><b>考试中</b></div>
+                  <div v-if="record.state === 3"><b>比赛中断</b></div>
+                  <div v-if="record.state === 4"><b>比赛结束</b></div>
+                  <div v-if="record.state === 5" style="color:red;"><b>考生缺考</b></div>
+                </span>
+                <span slot="studentMissAction" slot-scope="text, record">
+                  <div v-if="record.state === 0">
+                    <a @click="studentMiss(record.id)" class="colorLink">
+                      缺考
+                    </a>
+                  </div>
+                  <div v-if="record.state === 2">
+                    <a @click="studentError(record.id)" class="colorError">
+                      违纪
+                    </a>
+                  </div>
                 </span>
               </a-table>
             </a-col>
-            <a-col :span="10" :offset="2">
-              <a-table :columns="judgeColumns" :data-source="judgeData" bordered :pagination="false" rowKey="code">
+            <a-col :span="6" :offset="1">
+              <a-table :columns="judgeColumns" :data-source="leftJudgeData" bordered :pagination="false" rowKey="code">
                 <span slot="judgeAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color: red;">未就绪</div>
-                  <div v-if="record.state === 1" style="color: green">已就绪</div>
+                  <div v-if="record.state === 0" style="color: red;"><b>未就绪</b></div>
+                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
+                </span>
+              </a-table>
+            </a-col>
+            <a-col :span="6">
+              <a-table :columns="judgeColumns" :data-source="rightJudgeData" bordered :pagination="false" rowKey="code">
+                <span slot="judgeAction" slot-scope="text, record">
+                  <div v-if="record.state === 0" style="color: red;"><b>未就绪</b></div>
+                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
                 </span>
               </a-table>
             </a-col>
@@ -76,38 +97,56 @@
 <script>
 const studentColumns = [
   {
-    title: '考生姓名',
-    className: 'name',
-    dataIndex: 'name'
+    title: '考生赛位',
+    className: 'seatName',
+    dataIndex: 'seatName',
+    align: 'center'
   },
   {
-    title: '考生就绪状态',
+    title: '考生编号',
+    className: 'code',
+    dataIndex: 'code',
+    align: 'center'
+  },
+  {
+    title: '状态',
     className: 'state',
-    scopedSlots: { customRender: 'studentAction' }
+    scopedSlots: { customRender: 'studentAction' },
+    align: 'center'
+  },
+  {
+    title: '操作',
+    className: 'state',
+    scopedSlots: { customRender: 'studentMissAction' },
+    align: 'center'
   }
 ]
 const judgeColumns = [
   {
-    title: '裁判名字',
-    className: 'name',
-    dataIndex: 'name'
+    title: '裁判编号',
+    className: 'code',
+    dataIndex: 'code',
+    align: 'center'
   },
   {
-    title: '裁判就绪状态',
+    title: '状态',
     className: 'state',
-    scopedSlots: { customRender: 'judgeAction' }
+    scopedSlots: { customRender: 'judgeAction' },
+    align: 'center'
   }
 ]
 const questionColumns = [
   {
     title: '题目类型',
     className: 'gameType',
-    dataIndex: 'gameType'
+    dataIndex: 'gameType',
+    align: 'center'
   },
   {
     title: '题目名称',
     className: 'name',
-    dataIndex: 'name'
+    dataIndex: 'name',
+    align: 'center'
   }
 ]
 export default {
@@ -123,6 +162,8 @@ export default {
       questionColumns,
       studentData: [],
       judgeData: [],
+      leftJudgeData: [],
+      rightJudgeData: [],
       questionData: [],
       config: '',
       form: {
@@ -136,7 +177,8 @@ export default {
     this.getConfigVO()
     this.stateTimer = setInterval(this.getState, 1000)
     this.studentTimer = setInterval(this.getStudentData, 1000)
-    this.judgeTimer = setInterval(this.getJudgeData, 1000)
+    this.leftJudgeTimer = setInterval(this.getLeftJudgeData, 1000)
+    this.rightJudgeTimer = setInterval(this.getRightJudgeData, 1000)
     this.questionTimer = setInterval(this.getQuestionData, 1000)
   },
   methods: {
@@ -189,17 +231,16 @@ export default {
     getStudentData () {
       this.axios.get('/seatDraw/getStudentReadyShowVO').then(data => {
         this.studentData = data
-        if (data === null) {
-          clearInterval(this.studentTimer)
-          clearInterval(this.judgeTimer)
-          clearInterval(this.stateTimer)
-          clearInterval(this.questionTimer)
-        }
       })
     },
-    getJudgeData () {
-      this.axios.get('/judgeDrawResult/getJudgeReadyList').then(data => {
-        this.judgeData = data
+    getLeftJudgeData () {
+      this.axios.get('/judgeDrawResult/getLeftJudgeReadyList').then(data => {
+        this.leftJudgeData = data
+      })
+    },
+    getRightJudgeData () {
+      this.axios.get('/judgeDrawResult/getRightJudgeReadyList').then(data => {
+        this.rightJudgeData = data
       })
     },
     handleSubmit () {
@@ -224,12 +265,43 @@ export default {
         this.$message.success('下发试卷试卷成功')
         this.issueState = true
       })
+    },
+    doStudentMiss (id) {
+      this.axios.get('/seatDraw/miss/beReady?seatDrawId=' + id).then(data => {
+        this.$message.success('修改考生状态成功')
+      })
+    },
+    doStudentError (id) {
+      this.axios.get('/seatDraw/error/beReady?seatDrawId=' + id).then(data => {
+        this.$message.success('修改考生状态成功')
+      })
+    },
+    studentMiss (id) {
+      const that = this
+      this.$confirm({
+        title: '确认缺考?',
+        onOk () {
+          that.doStudentMiss(id)
+        },
+        onCancel () {}
+      })
+    },
+    studentError (id) {
+      const that = this
+      this.$confirm({
+        title: '确认违纪?',
+        onOk () {
+          that.doStudentError(id)
+        },
+        onCancel () {}
+      })
     }
   },
   destroyed () {
     // 页面销毁时结束轮询
     clearInterval(this.studentTimer)
-    clearInterval(this.judgeTimer)
+    clearInterval(this.leftJudgeTimer)
+    clearInterval(this.rightJudgeTimer)
     clearInterval(this.stateTimer)
     clearInterval(this.questionTimer)
   }
@@ -241,16 +313,17 @@ export default {
   width: 150px;
   height: 40px;
 }
-.success {
+
+.colorSuccess {
   color: #52c41a;
 }
-.error {
+.colorError {
   color: #ff4d4f;
 }
-.link {
+.colorLink {
   color: #1890ff;
 }
-.warning {
+.colorWarning {
   color: #faad14;
 }
 </style>
