@@ -28,7 +28,7 @@
             </div>
           </a-descriptions-item>
           <a-descriptions-item label="编号">
-           <p style="font-size: 24px"> {{ signInfo.code }}</p>
+            <p style="font-size: 24px"> {{ signInfo.code }}</p>
           </a-descriptions-item>
           <!--        <a-descriptions-item label="姓名">-->
           <!--          {{ signInfo.name }}-->
@@ -51,12 +51,37 @@
         </a-descriptions>
       </div>
     </a-modal>
+    <div v-if="signInfo.type == 1">
+      <a-card :title="titleInfo">
+        <a-table
+          :columns="columnsOne"
+          :data-source="signOneData"
+          :pagination="false"
+          rowKey="code"
+          style="margin-top: 10px"
+          size="small"
+        ></a-table>
+      </a-card>
+    </div>
     <div v-if="signInfo.type == 2">
-      <a-card title="本场考试人员信息">
+      <a-card :title="titleInfo">
         <a-table
           :columns="columns"
           :data-source="signTwoData"
           :pagination="false"
+          rowKey="code"
+          style="margin-top: 10px"
+          size="small"
+        ></a-table>
+      </a-card>
+    </div>
+    <div v-if="signInfo.type == 4">
+      <a-card :title="titleInfo">
+        <a-table
+          :columns="columnsOne"
+          :data-source="signOneData"
+          :pagination="false"
+          rowKey="code"
           style="margin-top: 10px"
           size="small"
         ></a-table>
@@ -93,11 +118,34 @@
       key: 'seatId'
     }
   ]
+  const columnsOne = [
+    {
+      title: '所属单位',
+      dataIndex: 'companyName',
+      key: 'companyName'
+    },
+    {
+      title: '编码',
+      dataIndex: 'code',
+      key: 'code'
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: '身份证号',
+      dataIndex: 'idCard',
+      key: 'idCard'
+    }
+  ]
   export default {
     name: 'QrSign',
     data () {
       return {
         columns,
+        columnsOne,
         timer: null,
         title: null,
         signInfo: {
@@ -114,7 +162,10 @@
         visible: false,
         idList: [],
         signTwoData: [],
-        msg: ''
+        signOneData: [],
+        signAway: [],
+        msg: '',
+        titleInfo: ''
       }
     },
     mounted () {
@@ -160,9 +211,24 @@
             }
           }
         )
+        if (this.signInfo.type === 1) {
+          this.axios.get('/student/getStudentListHaveSignOne').then(data => {
+            this.signOneData = data
+            this.titleInfo = '候考区人数：' + data.length + '人'
+          })
+        }
+        if (this.signInfo.type === 2) {
         this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
-          if (data.type === 2) { this.signTwoData = data }
+          this.signTwoData = data
+          this.titleInfo = '备考区人数：' + data.length + '人'
         })
+        }
+        if (this.signInfo.type === 4) {
+          this.axios.get('/student/getStudentListHaveSignAway').then(data => {
+            this.signAway = data
+            this.titleInfo = '离场人数：' + data.length + '人'
+          })
+        }
       },
       showModal () {
         this.visible = true
