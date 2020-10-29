@@ -194,9 +194,6 @@ export default {
           clearInterval(this.judgeTimer)
           clearInterval(this.stateTimer)
           clearInterval(this.questionTimer)
-          this.$success({
-            title: '比赛全部结束'
-          })
         }
       })
     },

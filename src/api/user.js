@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
 export function login (loginParam) {
-  return request.post('/users/login', {
-    loginParam
+  return request.post('/admin/login', {
+      ...loginParam
   })
 }
 

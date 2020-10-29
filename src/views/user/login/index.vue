@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import SHA256 from 'crypto-js/sha256'
+// import SHA256 from 'crypto-js/sha256'
 import { login } from '@/api/user'
 
 export default {
@@ -58,16 +58,15 @@ export default {
         }
         this.loading = true
         login({
-          ...this.form,
-          password: SHA256(this.form.password).toString()
+          ...this.form
+          // password: SHA256(this.form.password).toString()
         })
           .then(data => {
             console.log('data', data)
-            const { token, employee } = data
-            localStorage.setItem('token', token)
+            localStorage.setItem('token', data)
             this.$notification.success({
               message: '登录成功',
-              description: `欢迎回来，${employee.name}`
+              description: '欢迎回来'
             })
             this.$router.push({ path: '/' })
           })
