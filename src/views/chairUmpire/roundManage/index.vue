@@ -60,7 +60,8 @@
               <a-table :columns="judgeColumns" :data-source="leftJudgeData" bordered :pagination="false" rowKey="code">
                 <span slot="judgeAction" slot-scope="text, record">
                   <div v-if="record.state === 0" style="color: red;"><b>未就绪</b></div>
-                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
+                  <div v-if="record.state === 1" style="color: blue"><b>已就绪</b></div>
+                  <div v-if="record.state === 2" style="color: green"><b>已提交</b></div>
                 </span>
               </a-table>
             </a-col>
@@ -68,7 +69,8 @@
               <a-table :columns="judgeColumns" :data-source="rightJudgeData" bordered :pagination="false" rowKey="code">
                 <span slot="judgeAction" slot-scope="text, record">
                   <div v-if="record.state === 0" style="color: red;"><b>未就绪</b></div>
-                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
+                  <div v-if="record.state === 1" style="color: blue"><b>已就绪</b></div>
+                  <div v-if="record.state === 2" style="color: green"><b>已提交</b></div>
                 </span>
               </a-table>
             </a-col>
