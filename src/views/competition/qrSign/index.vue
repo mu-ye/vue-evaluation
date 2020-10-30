@@ -1,5 +1,6 @@
 <template>
   <div style="font-size: 24px">
+    <a-button @click="test()">test</a-button>
     <a-alert
       message="提示信息！"
       :description="msg"
@@ -45,7 +46,7 @@
           <!--        <a-descriptions-item label="手机">-->
           <!--          {{ signInfo.phone }}-->
           <!--        </a-descriptions-item>-->
-          <a-descriptions-item label="考位">
+          <a-descriptions-item  v-if="this.signInfo.type === 2" label="考位">
             <p style="font-size: 24px"><b> {{ signInfo.seatInfo }}</b></p>
           </a-descriptions-item>
         </a-descriptions>
@@ -79,7 +80,7 @@
       <a-card :title="titleInfo">
         <a-table
           :columns="columnsOne"
-          :data-source="signOneData"
+          :data-source="signAway"
           :pagination="false"
           rowKey="code"
           style="margin-top: 10px"
@@ -114,8 +115,8 @@
     },
     {
       title: '考位',
-      dataIndex: 'seatId',
-      key: 'seatId'
+      dataIndex: 'seatInfo',
+      key: 'seatInfo'
     }
   ]
   const columnsOne = [
@@ -213,18 +214,21 @@
         )
         if (this.signInfo.type === 1) {
           this.axios.get('/student/getStudentListHaveSignOne').then(data => {
+            this.signOneData = []
             this.signOneData = data
             this.titleInfo = '候考区人数：' + data.length + '人'
           })
         }
         if (this.signInfo.type === 2) {
         this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
+          this.signTwoData = []
           this.signTwoData = data
           this.titleInfo = '备考区人数：' + data.length + '人'
         })
         }
         if (this.signInfo.type === 4) {
           this.axios.get('/student/getStudentListHaveSignAway').then(data => {
+            this.signAway = []
             this.signAway = data
             this.titleInfo = '离场人数：' + data.length + '人'
           })
@@ -248,6 +252,7 @@
         this.visible = false
       },
       sign () {
+        this.idList = []
         this.idList.push(this.signInfo.id)
         if (this.signInfo.type === 1) {
           this.axios.post('/student/signInOne', this.idList).then(() => {
