@@ -46,7 +46,8 @@
           <!--        <a-descriptions-item label="手机">-->
           <!--          {{ signInfo.phone }}-->
           <!--        </a-descriptions-item>-->
-          <a-descriptions-item  v-if="this.signInfo.type === 2" label="考位">
+
+          <a-descriptions-item v-if="signInfo.type == 2" label="考位">
             <p style="font-size: 24px"><b> {{ signInfo.seatInfo }}</b></p>
           </a-descriptions-item>
         </a-descriptions>
