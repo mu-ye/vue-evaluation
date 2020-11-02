@@ -242,21 +242,6 @@
       dataIndex: 'id',
       key: 'id'
     },
-    // {
-    //   title: '学生编号',
-    //   dataIndex: 'studentCode',
-    //   key: 'studentCode'
-    // },
-    // {
-    //   title: '学生姓名',
-    //   dataIndex: 'studentName',
-    //   key: 'studentName'
-    // },
-    // {
-    //   title: '裁判Id',
-    //   dataIndex: 'judgeId',
-    //   key: 'judgeId'
-    // },
     {
       title: '裁判姓名',
       dataIndex: 'judgeName',

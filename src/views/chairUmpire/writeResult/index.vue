@@ -2,154 +2,67 @@
   <div>
     <a-card style="width: 100%;margin: 24px 0">
       <a-row>
-        <a-form :form="form" layout="vertical" hide-required-mark @submit="handleSubmit">
+        <a-form-model ref="ruleForm" :model="form" :rules="rules">
           <a-row>
             <a-col :span="5" offset="1">
-              <a-form-item label="场次">
-                <a-select default-value="1" style="width: 240px" v-model="gameNumber">
-                  <a-select-option value="1" key="1">
-                    1
-                  </a-select-option>
-                  <a-select-option value="2" key="2">
-                    2
-                  </a-select-option>
-                  <a-select-option value="3" key="3">
-                    3
-                  </a-select-option>
-                  <a-select-option value="4" key="4">
-                    4
-                  </a-select-option>
-                  <a-select-option value="5" key="5">
-                    5
-                  </a-select-option>
-                  <a-select-option value="6" key="6">
-                    6
-                  </a-select-option>
-                  <a-select-option value="7" key="7">
-                    7
+              <a-form-model-item label="场次" prop="gameNumber">
+                <a-select placeholder="请选择场次" v-model="form.gameNumber">
+                  <a-select-option v-for="item in gameNumberList" :value="item.value" :key="item.value">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-item>
+              </a-form-model-item>
             </a-col>
             <a-col :span="5" offset="1">
-              <a-form-item label="轮次">
-                <a-select default-value="1" style="width: 240px" v-model="gameNumber">
-                  <a-select-option value="1">
-                    1
-                  </a-select-option>
-                  <a-select-option value="2">
-                    2
-                  </a-select-option>
-                  <a-select-option value="3">
-                    3
+              <a-form-model-item label="轮次" prop="gameRound">
+                <a-select v-model="form.gameRound">
+                  <a-select-option v-for="index in gameRoundList" :key="index.value" :value="index.value">
+                    {{ index.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-item>
+              </a-form-model-item>
             </a-col>
             <a-col :span="5" offset="1">
-              <a-form-item label="裁判座位号">
-                <a-input v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]" />
-              </a-form-item>
+              <a-form-model-item label="裁判座位号" prop="seatId">
+                <a-select placeholder="请选择裁判赛位" v-model="form.seatId">
+                  <a-select-option v-for="item in seatIdList" :key="item.id" :value="item.id">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
             </a-col>
             <a-col :span="5" offset="1">
-              <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
-                <a-button type="primary" html-type="submit" style="margin-top: 25px">
+              <a-form-model-item style="margin-top: 38px">
+                <a-button type="primary" @click="onSubmit">
                   开始录入成绩
                 </a-button>
-              </a-form-item>
+              </a-form-model-item>
             </a-col>
           </a-row>
-        </a-form>
+        </a-form-model>
       </a-row>
     </a-card>
-    <a-card>
-      <a-table :columns="columns" :data-source="tempResult" bordered :pagination="false" rowKey="id">
-        <span slot="action" slot-scope="text, record">
-          <div v-if="record.flag === 1">
-            <a-icon type="warning" style="color: #ff0000" @click="showChangeDrawer(record.studentId)"></a-icon>
-          </div>
-          <div v-else>
-            <a-button type="primary" size="small" @click="showDrawer(record.studentId)">详情</a-button>
-          </div>
-        </span>
-      </a-table>
+    <a-card v-if="standardShow">
+      <a-row>
+        <a-col :span="1" offset="1">
+          <a-button @click="writeResultOk" type="primary">
+            确认补录完成
+          </a-button>
+        </a-col>
+      </a-row>
+      <a-row style="margin-top: 30px">
+        <a-col :span="22" offset="1">
+          <a-table :columns="columns" :data-source="standardData" :pagination="false" rowKey="id" bordered>
+            <template slot="cent" slot-scope="text, record">
+              <editable-cell
+                :id="record.id"
+                :text="text"
+                @change="onCellChange(record.key, 'cent', $event)"
+              /> </template
+            ></a-table>
+        </a-col>
+      </a-row>
     </a-card>
-    <a-drawer
-      title="结果修正"
-      width="100%"
-      :visible="changeResultVisible"
-      :body-style="{ paddingBottom: '80px' }"
-      :destroyOnClose="true"
-      @close="onClose"
-    >
-      <a-row>
-        <a-col span="16">
-          <a-table
-            :columns="columnsDetailOne"
-            :data-source="resultDetailOne"
-            bordered
-            :pagination="false"
-            rowKey="id"
-            style="background-color: #FFFFFF"
-            size="small"
-          >
-            <template slot="cent" slot-scope="text, record">
-              <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)" />
-            </template>
-          </a-table>
-        </a-col>
-        <a-col span="8">
-          <a-table
-            :columns="columnsDetailTwo"
-            :data-source="resultDetailTwo"
-            bordered
-            :pagination="false"
-            rowKey="id"
-            style="background-color: #FFFFFF"
-            size="small"
-          >
-            <template slot="cent" slot-scope="text, record">
-              <editable-cell :id="record.id" :text="text" @change="onCellChange(record.key, 'cent', $event)" />
-            </template>
-          </a-table>
-        </a-col>
-      </a-row>
-    </a-drawer>
-    <a-drawer
-      title="详细打分结果"
-      width="100%"
-      :visible="resultVisible"
-      :body-style="{ paddingBottom: '80px' }"
-      :destroyOnClose="true"
-      @close="onClose"
-    >
-      <a-row>
-        <a-col span="16">
-          <a-table
-            :columns="columnsDetailOne"
-            :data-source="resultDetailOne"
-            bordered
-            :pagination="false"
-            rowKey="id"
-            style="background-color: #FFFFFF"
-            size="small"
-          >
-          </a-table>
-        </a-col>
-        <a-col span="8">
-          <a-table
-            :columns="columnsDetailTwo"
-            :data-source="resultDetailTwo"
-            bordered
-            :pagination="false"
-            rowKey="id"
-            style="background-color: #FFFFFF"
-            size="small"
-          >
-          </a-table>
-        </a-col>
-      </a-row>
-    </a-drawer>
   </div>
 </template>
 
@@ -158,122 +71,44 @@ const columns = [
   {
     title: 'id',
     dataIndex: 'id',
-    key: 'id'
+    key: 'id',
+    width: 2
   },
   {
-    title: '学生编号',
-    dataIndex: 'studentCode',
-    key: 'studentCode'
+    title: '考核内容',
+    dataIndex: 'text',
+    key: 'text',
+    width: 2
   },
   {
-    title: '学生姓名',
-    dataIndex: 'studentName',
-    key: 'studentName'
+    title: '考核点',
+    dataIndex: 'point',
+    key: 'point',
+    width: 2
   },
   {
-    title: '裁判Id',
-    dataIndex: 'judgeId',
-    key: 'judgeId'
+    title: '评分标准',
+    dataIndex: 'standard',
+    key: 'standard',
+    width: 10
   },
   {
-    title: '裁判',
-    dataIndex: 'judgeName',
-    key: 'judgeName'
+    title: '最大得分',
+    dataIndex: 'score',
+    key: 'score',
+    width: 5
   },
   {
-    title: '得分',
-    dataIndex: 'result',
-    key: 'result'
-  },
-  {
-    title: '异常',
-    key: 'action',
-    scopedSlots: { customRender: 'action' },
-    align: 'center'
-  }
-]
-const columnsDetailOne = [
-  {
-    title: 'id',
-    dataIndex: 'id',
-    key: 'id'
-  },
-  {
-    title: '学生编号',
-    dataIndex: 'studentCode',
-    key: 'studentCode'
-  },
-  {
-    title: '考生',
-    dataIndex: 'studentName',
-    key: 'studentName'
-  },
-  // {
-  //   title: '裁判Id',
-  //   dataIndex: 'judgeId',
-  //   key: 'judgeId'
-  // },
-  {
-    title: '题目',
-    dataIndex: 'questionName',
-    key: 'questionName'
-  },
-  {
-    title: '打分项',
-    dataIndex: 'questionStandardName',
-    key: 'questionStandardName'
-  },
-  {
-    title: '裁判',
-    dataIndex: 'judgeName',
-    key: 'judgeName'
+    title: '最少得分',
+    dataIndex: 'minScore',
+    key: 'minScore',
+    width: 5
   },
   {
     title: '得分',
     dataIndex: 'cent',
-    scopedSlots: { customRender: 'cent' }
-  }
-]
-const columnsDetailTwo = [
-  {
-    title: 'id',
-    dataIndex: 'id',
-    key: 'id'
-  },
-  // {
-  //   title: '学生编号',
-  //   dataIndex: 'studentCode',
-  //   key: 'studentCode'
-  // },
-  // {
-  //   title: '学生姓名',
-  //   dataIndex: 'studentName',
-  //   key: 'studentName'
-  // },
-  // {
-  //   title: '裁判Id',
-  //   dataIndex: 'judgeId',
-  //   key: 'judgeId'
-  // },
-  {
-    title: '裁判姓名',
-    dataIndex: 'judgeName',
-    key: 'judgeName'
-  },
-  // {
-  //   title: '题目',
-  //   dataIndex: 'questionName',
-  //   key: 'questionName'
-  // },
-  // {
-  //   title: '打分项',
-  //   dataIndex: 'questionStandardName',
-  //   key: 'questionStandardName'
-  // },
-  {
-    title: '得分',
-    dataIndex: 'cent',
-    scopedSlots: { customRender: 'cent' }
+    scopedSlots: { customRender: 'cent' },
+    width: 2
   }
 ]
 const EditableCell = {
@@ -313,11 +148,16 @@ const EditableCell = {
     },
     check () {
       console.log('check', this.value, this.id)
-      this.axios.get('/test-result/editCent?id=' + this.id + '&cent=' + this.value).then(() => {
-        this.editable = false
-        // 转换成Number
-        // this.$emit('change', this.value * 1)
-      })
+      this.axios
+        .get('/test-result/writeOneTestResult', {
+          params: {
+            id: this.id,
+            cent: this.value
+          }
+        })
+        .then(() => {
+          this.editable = false
+        })
     },
     edit () {
       this.editable = true
@@ -330,20 +170,127 @@ export default {
   },
   data () {
     return {
+      gameNumberList: [
+        { value: '1', name: '1' },
+        { value: '2', name: '2' },
+        { value: '3', name: '3' },
+        { value: '4', name: '4' },
+        { value: '5', name: '5' },
+        { value: '6', name: '6' },
+        { value: '7', name: '7' }
+      ],
+      gameRoundList: [
+        { value: '1', name: '1' },
+        { value: '2', name: '2' },
+        { value: '3', name: '3' }
+      ],
+      seatIdList: [
+        { id: '1', name: '1' },
+        { id: '2', name: '2' },
+        { id: '3', name: '3' },
+        { id: '4', name: '4' },
+        { id: '5', name: '5' },
+        { id: '6', name: '6' },
+        { id: '7', name: '7' },
+        { id: '8', name: '8' },
+        { id: '9', name: '9' },
+        { id: '10', name: '10' },
+        { id: '11', name: '11' },
+        { id: '12', name: '12' },
+        { id: '13', name: '13' },
+        { id: '14', name: '14' },
+        { id: '15', name: '15' },
+        { id: '16', name: '16' },
+        { id: '17', name: '17' },
+        { id: '18', name: '18' },
+        { id: '19', name: '19' },
+        { id: '20', name: '20' },
+        { id: '21', name: '21' },
+        { id: '22', name: '22' },
+        { id: '23', name: '23' },
+        { id: '24', name: '24' },
+        { id: '25', name: '25' },
+        { id: '26', name: '26' },
+        { id: '27', name: '27' },
+        { id: '28', name: '28' },
+        { id: '29', name: '29' },
+        { id: '30', name: '30' },
+        { id: '31', name: '31' },
+        { id: '32', name: '32' },
+        { id: '33', name: '33' },
+        { id: '34', name: '34' },
+        { id: '35', name: '35' },
+        { id: '36', name: '36' }
+      ],
+      form: {
+        gameNumber: '',
+        gameRound: '',
+        seatId: ''
+      },
+      rules: {
+        gameNumber: [{ required: true, message: '请选择轮次', trigger: 'change' }],
+        gameRound: [{ required: true, message: '请选择场次', trigger: 'change' }],
+        seatId: [{ required: true, message: '请选择裁判赛位', trigger: 'change' }]
+      },
       columns,
-      columnsDetailOne,
-      columnsDetailTwo,
-      gameNumber: 1,
-      gameRound: 1,
-      resultDetailOne: [],
-      resultDetailTwo: [],
-      tempResult: [],
-      visible: false,
-      changeResultVisible: false,
-      resultVisible: false
+      standardData: [],
+      standardShow: false
     }
   },
   methods: {
+    // 查询手动录入成绩
+    onSubmit () {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          this.axios
+            .get('/test-result/getWriteResultStandardVO', {
+              params: {
+                gameNumber: this.form.gameNumber,
+                gameRound: this.form.gameRound,
+                seatId: this.form.seatId
+              }
+            })
+            .then(data => {
+              console.log(data)
+              this.standardData = data
+              this.standardShow = true
+            })
+            .catch(err => {
+              console.log(err)
+              // 隐藏评分标准
+              this.standardShow = false
+            })
+        }
+      })
+    },
+    writeResultOk (id) {
+      const that = this
+      this.$confirm({
+        title: '确认全部成绩补录完成，确认完成后成绩不可再次补录',
+        onOk () {
+          that.doWriteResultOk()
+        },
+        onCancel () {}
+      })
+    },
+    // 确认全部修改成功，修改后不得再次手动录入成绩
+    doWriteResultOk () {
+      this.axios
+        .get('/test-result/writeTestResultEnd', {
+          params: {
+            gameNumber: this.form.gameNumber,
+            gameRound: this.form.gameRound,
+            seatId: this.form.seatId
+          }
+        })
+        .then(data => {
+          console.log(data)
+          // 全部成绩补录成功
+          this.standardShow = false
+          this.$message.success('裁判补录成绩成功')
+        })
+    },
+
     checkResult () {
       this.axios
         .get('/test-result/getTempResult?gameNumber=' + this.gameNumber + '&gameRound=' + this.gameRound)
