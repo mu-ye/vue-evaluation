@@ -1,75 +1,91 @@
 <template>
   <div>
-<!--    <div class="table-operations">-->
-<!--      <a-button type="primary" @click="showAddDrawer">-->
-<!--        新增单位-->
-<!--      </a-button>-->
-<!--    </div>-->
-    <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false">
-      <span slot="action" slot-scope="text, record">
-        <a-button type="primary" @click="showDrawer(record)">
-          编辑
-        </a-button>
-<!--        <a-divider type="vertical" />-->
-<!--        <a-button type="danger" @click="showConfirm(record.id)">-->
-<!--          删除-->
-<!--        </a-button>-->
-      </span>
-    </a-table>
-    <a-drawer title="编辑信息" :width="480" :visible="visible" :body-style="{ paddingBottom: '80px' }" @close="onClose">
-      <a-form-model :form="form">
-        <a-form-model-item label="单位编码">
-          <a-input v-model="form.code" />
-        </a-form-model-item>
-        <a-form-model-item label="单位名">
-          <a-input v-model="form.name" />
-        </a-form-model-item>
-        <a-form-model-item label="单位简介">
-          <a-input v-model="form.introduction" />
-        </a-form-model-item>
-        <a-form-model-item label="领队姓名">
-          <a-input v-model="form.leaderName" />
-        </a-form-model-item>
-        <a-form-model-item label="领队电话">
-          <a-input v-model="form.leaderPhone" />
-        </a-form-model-item>
-        <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
-          <a-button type="primary" @click="handleSubmit">
-            提交修改
+    <!--    <div class="table-operations">-->
+    <!--      <a-button type="primary" @click="showAddDrawer">-->
+    <!--        新增单位-->
+    <!--      </a-button>-->
+    <!--    </div>-->
+    <a-card>
+      <div class="table-operations">
+        <a-upload
+          name="file"
+          :multiple="false"
+          action="/njdt/company/uploadCompany"
+          :headers="headers"
+          @change="handleChange"
+        >
+          <a-button>
+            <a-icon type="upload"/>
+            导入参赛队数据
           </a-button>
-        </a-form-model-item>
-      </a-form-model>
-    </a-drawer>
-    <a-drawer
-      title="新增单位"
-      :width="480"
-      :visible="addVisible"
-      :body-style="{ paddingBottom: '80px' }"
-      @close="onClose"
-    >
-      <a-form-model :form="form">
-        <a-form-model-item label="单位编码">
-          <a-input v-model="form.code" />
-        </a-form-model-item>
-        <a-form-model-item label="单位名">
-          <a-input v-model="form.name" />
-        </a-form-model-item>
-        <a-form-model-item label="单位简介">
-          <a-input v-model="form.introduction" />
-        </a-form-model-item>
-        <a-form-model-item label="领队姓名">
-          <a-input v-model="form.leaderName" />
-        </a-form-model-item>
-        <a-form-model-item label="领队电话">
-          <a-input v-model="form.leaderPhone" />
-        </a-form-model-item>
-        <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
-          <a-button type="primary" @click="handleAddSubmit">
-            新增单位
+        </a-upload>
+      </div>
+      <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false" style="margin-top: 5px">
+        <span slot="action" slot-scope="text, record">
+          <a-button type="primary" @click="showDrawer(record)">
+            编辑
           </a-button>
-        </a-form-model-item>
-      </a-form-model>
-    </a-drawer>
+          <!--        <a-divider type="vertical" />-->
+          <!--        <a-button type="danger" @click="showConfirm(record.id)">-->
+          <!--          删除-->
+          <!--        </a-button>-->
+        </span>
+      </a-table>
+      <a-drawer title="编辑信息" :width="480" :visible="visible" :body-style="{ paddingBottom: '80px' }" @close="onClose">
+        <a-form-model :form="form">
+          <a-form-model-item label="单位编码">
+            <a-input v-model="form.code" />
+          </a-form-model-item>
+          <a-form-model-item label="单位名">
+            <a-input v-model="form.name" />
+          </a-form-model-item>
+          <a-form-model-item label="单位简介">
+            <a-input v-model="form.introduction" />
+          </a-form-model-item>
+          <a-form-model-item label="领队姓名">
+            <a-input v-model="form.leaderName" />
+          </a-form-model-item>
+          <a-form-model-item label="领队电话">
+            <a-input v-model="form.leaderPhone" />
+          </a-form-model-item>
+          <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+            <a-button type="primary" @click="handleSubmit">
+              提交修改
+            </a-button>
+          </a-form-model-item>
+        </a-form-model>
+      </a-drawer>
+      <a-drawer
+        title="新增单位"
+        :width="480"
+        :visible="addVisible"
+        :body-style="{ paddingBottom: '80px' }"
+        @close="onClose"
+      >
+        <a-form-model :form="form">
+          <a-form-model-item label="单位编码">
+            <a-input v-model="form.code" />
+          </a-form-model-item>
+          <a-form-model-item label="单位名">
+            <a-input v-model="form.name" />
+          </a-form-model-item>
+          <a-form-model-item label="单位简介">
+            <a-input v-model="form.introduction" />
+          </a-form-model-item>
+          <a-form-model-item label="领队姓名">
+            <a-input v-model="form.leaderName" />
+          </a-form-model-item>
+          <a-form-model-item label="领队电话">
+            <a-input v-model="form.leaderPhone" />
+          </a-form-model-item>
+          <a-form-model-item :wrapper-col="{ span: 12, offset: 5 }">
+            <a-button type="primary" @click="handleAddSubmit">
+              新增单位
+            </a-button>
+          </a-form-model-item>
+        </a-form-model>
+      </a-drawer>
+    </a-card>
   </div>
 </template>
 
@@ -123,6 +139,9 @@
           introduction: '',
           leaderName: '',
           leaderPhone: ''
+        },
+        headers: {
+          authorization: 'authorization-text'
         }
       }
     },
@@ -194,7 +213,18 @@
           },
           onCancel () {}
         })
-      }
+      },
+        handleChange (info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList)
+    }
+    if (info.file.status === 'done') {
+      this.$message.success(`${info.file.name} 上传成功！`)
+      this.init()
+    } else if (info.file.status === 'error') {
+      this.$message.error(`${info.file.name} 上传失败`)
+    }
+  }
     }
   }
 </script>

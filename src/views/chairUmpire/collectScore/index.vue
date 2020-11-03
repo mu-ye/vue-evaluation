@@ -1,6 +1,8 @@
 <template>
   <div>
-    <a-button @click="exportExcel()">导出excel</a-button> <a-button @click="checkCountCondition()">检验打分结果是否满足计算条件</a-button>
+    <a-button @click="exportExcel()">导出excel</a-button>
+    <a-button @click="checkCountCondition()">检验打分结果是否满足计算条件</a-button>
+    <a-button @click="getResult()">计算总成绩</a-button>
     <a-card style="margin-top: 10px">
       <a-table
         :columns="columns"
@@ -12,7 +14,9 @@
         size="small"
       >
       </a-table>
-      <div style="text-align: center;margin-top: 10px"><a-button type="primary" @click="saveResult">保存计算结果</a-button></div>
+      <div style="text-align: center;margin-top: 10px">
+        <a-button type="primary" @click="saveResult">保存计算结果</a-button>
+      </div>
     </a-card>
   </div>
 </template>
@@ -72,10 +76,13 @@
       }
     },
     mounted () {
-    this.init()
-      },
+      this.init()
+    },
     methods: {
       init () {
+
+      },
+      getResult () {
         this.axios.get('/test-result/getFinalResult').then(data => {
           console.log(data)
           this.finalResult = data
@@ -92,7 +99,6 @@
       },
       saveResult () {
         this.axios.post('/test-final-result/saveResult', this.finalResult).then(() => {
-
         })
       }
     }

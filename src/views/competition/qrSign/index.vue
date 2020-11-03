@@ -11,7 +11,7 @@
       :visible="visible"
       :confirm-loading="confirmLoading"
       @ok="handleOk(signInfo.id)"
-      @cancel="handleCancel"
+      @cancel="handleCancel(signInfo.codeId)"
       okText="确认"
       cancelText="取消"
       :maskClosable="false"
@@ -158,7 +158,8 @@
           companyName: '',
           phone: '',
           url: '',
-          seatInfo: ''
+          seatInfo: '',
+          codeId: 0
         },
         confirmLoading: false,
         visible: false,
@@ -247,8 +248,11 @@
           this.confirmLoading = false
         }, 1000)
       },
-      handleCancel (e) {
-        console.log('Clicked cancel button')
+      handleCancel (codeId) {
+        console.log(codeId)
+        this.axios.delete('/code-state/deleteCodeById?id=' + codeId).then(data => {
+          console.log('删除结果：', data)
+        })
         this.timer = setInterval(this.test, 1000)
         this.visible = false
       },
