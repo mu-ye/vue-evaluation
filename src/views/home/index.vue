@@ -35,23 +35,27 @@
             <a-col :span="10" :offset="1">
               <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
                 <span slot="studentAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color:red;"><b>未就绪</b></div>
-                  <div v-if="record.state === 1" style="color: green"><b>已就绪</b></div>
-                  <div v-if="record.state === 2" style="color: black"><b>考试中</b></div>
-                  <div v-if="record.state === 3"><b>比赛中断</b></div>
-                  <div v-if="record.state === 4"><b>比赛结束</b></div>
-                  <div v-if="record.state === 5" style="color:red;"><b>考生缺考</b></div>
+                  <div v-if="record.state === 0" class="colorError"><b>未签到</b></div>
+                  <div v-if="record.state === 1"><b>考生就绪</b></div>
+                  <div v-if="record.state === 2" class="colorLink"><b>考试中</b></div>
+                  <div v-if="record.state === 3" class="colorError"><b>比赛中断</b></div>
+                  <div v-if="record.state === 4" class="colorSuccess"><b>比赛结束</b></div>
+                  <div v-if="record.state === 5" class="colorError"><b>考生缺考</b></div>
+                  <div v-if="record.state === 6" class="colorError"><b>考生违纪</b></div>
                 </span>
                 <span slot="studentMissAction" slot-scope="text, record">
                   <div v-if="record.state === 0">
-                    <a @click="studentMiss(record.id)" class="colorLink">
-                      缺考
-                    </a>
+                    <a-tag @click="studentMiss(record.id)" class="colorError">
+                      <b>是否缺考</b>
+                    </a-tag>
                   </div>
                   <div v-if="record.state === 2">
-                    <a @click="studentError(record.id)" class="colorError">
-                      违纪
-                    </a>
+                    <a-tag @click="studentError(record.id)" class="colorError">
+                      <b>是否违纪</b>
+                    </a-tag>
+                  </div>
+                  <div v-if="record.state !== 2 && record.state !== 0">
+                    -
                   </div>
                 </span>
               </a-table>
@@ -59,18 +63,20 @@
             <a-col :span="6" :offset="1">
               <a-table :columns="judgeColumns" :data-source="leftJudgeData" bordered :pagination="false" rowKey="code">
                 <span slot="judgeAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color: red;"><b>未就绪</b></div>
-                  <div v-if="record.state === 1" style="color: blue"><b>已就绪</b></div>
-                  <div v-if="record.state === 2" style="color: green"><b>已提交</b></div>
+                  <div v-if="record.state === 0" class="colorError"><b>未就绪</b></div>
+                  <div v-if="record.state === 1" ><b>已就绪</b></div>
+                  <div v-if="record.state === 2" class="colorLink"><b>监考中</b></div>
+                  <div v-if="record.state === 3" class="colorSuccess"><b>已提交</b></div>
                 </span>
               </a-table>
             </a-col>
             <a-col :span="6">
               <a-table :columns="judgeColumns" :data-source="rightJudgeData" bordered :pagination="false" rowKey="code">
                 <span slot="judgeAction" slot-scope="text, record">
-                  <div v-if="record.state === 0" style="color: red;"><b>未就绪</b></div>
-                  <div v-if="record.state === 1" style="color: blue"><b>已就绪</b></div>
-                  <div v-if="record.state === 2" style="color: green"><b>已提交</b></div>
+                  <div v-if="record.state === 0" class="colorError"><b>未就绪</b></div>
+                  <div v-if="record.state === 1" ><b>已就绪</b></div>
+                  <div v-if="record.state === 2" class="colorLink"><b>监考中</b></div>
+                  <div v-if="record.state === 3" class="colorSuccess"><b>已提交</b></div>
                 </span>
               </a-table>
             </a-col>
