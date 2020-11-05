@@ -1,6 +1,9 @@
 <template>
   <div>
-    <a-button @click="exportExcel()">导出excel</a-button> <a-button @click="checkCountCondition()">检验打分结果是否满足计算条件</a-button>
+    <a-button @click="exportExcel()">导出excel</a-button>
+    <a-button @click="checkCountCondition()">检验打分结果是否满足计算条件</a-button>
+    <a-button @click="getResult()">计算总成绩</a-button>
+    <a-button @click="getResultDrawer()">查看异常详情</a-button>
     <a-card style="margin-top: 10px">
       <a-table
         :columns="columns"
@@ -12,8 +15,26 @@
         size="small"
       >
       </a-table>
-      <div style="text-align: center;margin-top: 10px"><a-button type="primary" @click="saveResult">保存计算结果</a-button></div>
+      <div style="text-align: center;margin-top: 10px">
+        <a-button type="primary" @click="saveResult">保存计算结果</a-button>
+      </div>
     </a-card>
+    <a-drawer
+      title="查看错误详情"
+      :width="1000"
+      :visible="errorVisible"
+      :body-style="{ paddingBottom: '80px' }"
+      @close="onClose"
+    >
+      <a-row>
+      <a-col sapn="8">
+      <p v-for="item in computerErrData" v-bind:key="item"  style="border: solid 1px black;width:250px">{{ item }}</p>
+      </a-col>
+      <a-col sapn="8">
+        <p v-for="item in useTimeErrData" v-bind:key="item"  style="border: solid 1px black;width:250px">{{ item }}</p>
+      </a-col>
+      </a-row>
+    </a-drawer>
   </div>
 </template>
 
@@ -65,17 +86,23 @@
   export default {
     data () {
       return {
+        errorVisible: false,
         columns,
         gameNumber: 0,
         gameRound: 0,
-        finalResult: []
+        finalResult: [],
+        computerErrData: [],
+        useTimeErrData: []
       }
     },
     mounted () {
-    this.init()
-      },
+      this.init()
+    },
     methods: {
       init () {
+
+      },
+      getResult () {
         this.axios.get('/test-result/getFinalResult').then(data => {
           console.log(data)
           this.finalResult = data
@@ -92,8 +119,19 @@
       },
       saveResult () {
         this.axios.post('/test-final-result/saveResult', this.finalResult).then(() => {
-
         })
+      },
+      getResultDrawer () {
+        this.errorVisible = true
+        this.axios.get('/test-result/getComputerTestResultZero').then(data => {
+          this.computerErrData = data
+        })
+        this.axios.get('/test-result/getUseTimeNull').then(data => {
+          this.useTimeErrData = data
+        })
+      },
+      onClose () {
+        this.errorVisible = false
       }
     }
   }

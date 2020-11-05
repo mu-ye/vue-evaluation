@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-button type="primary" @click="drawSeat" :disabled="!drawFlag">赛位抽签</a-button>
+    <a-button type="primary" @click="drawSeat" :disabled="!drawFlag">赛位抽签</a-button> <a-button @click="exportSeatDrawResult()">导出赛位抽签结果</a-button>
     <a-table
       :columns="columns"
       :data-source="drawSeatResult"
@@ -87,6 +87,9 @@ export default {
           })
         }
       })
+    },
+    exportSeatDrawResult () {
+      window.open('/njdt/seatDraw/exportSeatDrawResult')
     }
   }
 }

@@ -1,12 +1,20 @@
 <template>
   <div>
-    <div class="table-operations">
-      <a-button type="primary">
-        导入考生数据
-      </a-button>
-    </div>
-    <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false" style="margin-top: 10px">
-    </a-table>
+    <a-card>
+      <div class="table-operations">
+        <a-upload
+          name="file"
+          :multiple="false"
+          action="/njdt/student/uploadStudent"
+          :headers="headers"
+          @change="handleChange"
+        >
+          <a-button> <a-icon type="upload" /> 导入考生数据 </a-button>
+        </a-upload>
+      </div>
+      <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false" style="margin-top: 10px">
+      </a-table>
+    </a-card>
   </div>
 </template>
 
@@ -57,7 +65,10 @@
     data () {
       return {
         columns,
-        data: []
+        data: [],
+        headers: {
+          authorization: 'authorization-text'
+        }
       }
     },
     mounted () {
@@ -69,6 +80,17 @@
           console.log(data)
           this.data = data
         })
+      },
+      handleChange (info) {
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList)
+        }
+        if (info.file.status === 'done') {
+          this.$message.success(`${info.file.name} 上传成功！`)
+          this.init()
+        } else if (info.file.status === 'error') {
+          this.$message.error(`${info.file.name} 上传失败`)
+        }
       }
     }
   }
