@@ -8,7 +8,12 @@ const request = axios.create({
   baseURL: '/njdt',
   timeout: 6000 // 请求超时时间
 })
-// 异常拦截处理器
+
+/**
+ * axios 请求拦截器和响应拦截器错误处理程序
+ * @param error
+ * @returns {Promise<never>}
+ */
 const errorHandler = error => {
   const { name, response } = error
   console.log('error', name, ...response)
@@ -39,7 +44,7 @@ const errorHandler = error => {
   return Promise.reject(error)
 }
 
-// request interceptor
+// 添加请求拦截器
 request.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   // 如果 token 存在，让每个请求携带自定义 token 请根据实际情况自行修改
@@ -56,8 +61,7 @@ request.interceptors.response.use(response => {
   // data success data error
   if (data.success === false) {
     // 抛出错误到 errorHandler 中处理
-    const error = new Error(data.errorMessage || '操作失' +
-      '败')
+    const error = new Error(data.errorMessage || '操作失' + '败')
     error.name = 'BizError'
     error.data = data
     message.error(data.errorMessage || '操作失败')

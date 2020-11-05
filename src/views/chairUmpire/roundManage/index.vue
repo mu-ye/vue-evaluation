@@ -34,6 +34,18 @@
           <a-row style="margin-top: 18px">
             <a-col :span="10" :offset="1">
               <a-table :columns="studentColumns" :data-source="studentData" bordered :pagination="false" rowKey="code">
+                <span slot="studentSeatAction" slot-scope="text, record">
+                  <div class="colorLink">
+                    <b>{{ record.seatName }}</b>
+                  </div>
+                </span>
+
+                <span slot="studentCodeAction" slot-scope="text, record">
+                  <div class="colorLink">
+                    <b>{{ record.code }}</b>
+                  </div>
+                </span>
+
                 <span slot="studentAction" slot-scope="text, record">
                   <div v-if="record.state === 0" class="colorError"><b>未签到</b></div>
                   <div v-if="record.state === 1"><b>考生就绪</b></div>
@@ -127,13 +139,13 @@ const studentColumns = [
   {
     title: '考生赛位',
     className: 'seatName',
-    dataIndex: 'seatName',
+    scopedSlots: { customRender: 'studentSeatAction' },
     align: 'center'
   },
   {
     title: '考生编号',
     className: 'code',
-    dataIndex: 'code',
+    scopedSlots: { customRender: 'studentCodeAction' },
     align: 'center'
   },
   {

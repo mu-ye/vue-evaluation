@@ -7,5 +7,5 @@ export function login (loginParam) {
 }
 
 export function getMenu () {
-  return request.get('/menu/getMenu')
+  return request.get('/admin/getMenuByRole')
 }
