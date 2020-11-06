@@ -13,6 +13,12 @@
         </a-upload>
       </div>
       <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false" style="margin-top: 10px">
+           <span slot="action" slot-scope="text, record">
+        <img
+          style="width:50px; height:50px;"
+          :src="record"
+        />
+           </span>
       </a-table>
     </a-card>
   </div>
@@ -59,6 +65,11 @@
       title: '二维码',
       dataIndex: 'twoDimensionalCode',
       key: 'twoDimensionalCode'
+    },
+    {
+      title: '操作',
+      key: 'action',
+      scopedSlots: { customRender: 'action' }
     }
   ]
   export default {
