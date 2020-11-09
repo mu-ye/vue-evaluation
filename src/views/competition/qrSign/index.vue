@@ -1,6 +1,6 @@
 <template>
   <div style="font-size: 24px">
-<!--    <a-button @click="test()">test</a-button>-->
+    <!--    <a-button @click="test()">test</a-button>-->
     <a-alert
       message="提示信息！"
       :description="msg"
@@ -23,7 +23,7 @@
           <a-descriptions-item label="照片" span="3">
             <div style="width: 100%;text-align: center">
               <img
-                style="width:50px; height:50px;"
+                style="height:150px;"
                 :src="signInfo.url"
               />
             </div>

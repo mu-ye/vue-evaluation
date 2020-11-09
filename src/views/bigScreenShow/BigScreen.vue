@@ -34,7 +34,7 @@
             </dv-decoration-7>
           </div>
           <div class="main-header-right-container">
-            <div class="digital-flop-item" v-for="item in digitalFlopData" :key="item.title" style="width: 200px;">
+            <div class="digital-flop-item" v-for="item in digitalFlopData" :key="item.title" style="width: 150px;">
               <div class="digital-flop-title">{{ item.title }}</div>
               <div class="digital-flop">
                 <dv-digital-flop :config="item.number" style="width:100px;height:50px;" />
@@ -81,6 +81,7 @@
                     class="main-content-card-judge-img"
                   >
                     <img :src="judgeShow.idCard" />
+                    <!--  <img src="../../assets/a.png" />-->
                   </dv-border-box-9>
                 </div>
               </div>
@@ -159,17 +160,17 @@ export default {
             {
               state: 1,
               label: '已就绪',
-              color: '#00baff'
+              color: '#254000'
             },
             {
               state: 2,
               label: '比赛中',
-              color: '#3de7c9'
+              color: '#ffc530'
             },
             {
               state: 3,
               label: '比赛中断',
-              color: '#ffc530'
+              color: '#3de7c9'
             },
             {
               state: 4,
@@ -217,7 +218,7 @@ export default {
     }
   },
   mounted () {
-    this.timer = setInterval(this.init, 500)
+    this.timer = setInterval(this.init, 5000)
   },
   methods: {
     init () {
@@ -228,9 +229,9 @@ export default {
         this.competition = data
         this.digitalFlopData = [
           {
-            title: '赛区总人数',
+            title: '候考区',
             number: {
-              number: [this.competition.totalNumber],
+              number: [this.competition.waitNumber],
               content: '{nt}',
               textAlign: 'right',
               style: {
@@ -241,9 +242,22 @@ export default {
             unit: '人'
           },
           {
-            title: '当前等候区人数',
+            title: '备考区',
             number: {
-              number: [this.competition.waitNumber],
+              number: [this.competition.readyNumber],
+              content: '{nt}',
+              textAlign: 'right',
+              style: {
+                fill: '#4d99fc',
+                fontWeight: 'bold'
+              }
+            },
+            unit: '人'
+          },
+          {
+            title: '考试中',
+            number: {
+              number: [this.competition.testNumber],
               content: '{nt}',
               textAlign: 'right',
               style: {
@@ -254,7 +268,7 @@ export default {
             unit: '人'
           },
           {
-            title: '已离场人数',
+            title: '已离场',
             number: {
               number: [this.competition.leaveNumber],
               content: '{nt}',
