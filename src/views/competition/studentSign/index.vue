@@ -26,6 +26,12 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :pagination="false"
     >
+      <span slot="img" slot-scope="text, record">
+        <img
+          style="height:50px;"
+          :src="`http://172.18.10.201:8889/res/file/idCard/${record.idCard}.png`"
+        />
+      </span>
       <span slot="action" slot-scope="text, record">
         <div v-if="record.signState == '0'" class="error">未签到</div>
         <div v-else class="success">已签到</div>
@@ -69,6 +75,11 @@
       title: '所属单位',
       dataIndex: 'companyName',
       key: 'companyName'
+    },
+    {
+      title: '照片',
+      key: 'img',
+      scopedSlots: { customRender: 'img' }
     },
     {
       title: '签到状态',

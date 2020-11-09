@@ -21,18 +21,18 @@
     </a-card>
     <a-drawer
       title="查看错误详情"
-      :width="1000"
+      :width="500"
       :visible="errorVisible"
       :body-style="{ paddingBottom: '80px' }"
       @close="onClose"
     >
       <a-row>
-      <a-col sapn="8">
-      <p v-for="item in computerErrData" v-bind:key="item"  style="border: solid 1px black;width:250px">{{ item }}</p>
-      </a-col>
-      <a-col sapn="8">
-        <p v-for="item in useTimeErrData" v-bind:key="item"  style="border: solid 1px black;width:250px">{{ item }}</p>
-      </a-col>
+        <a-col :sapn="10">
+          <div v-for="item in computerErrData" :key="item">{{ item }}</div>
+        </a-col>
+        <a-col :sapn="10">
+          <div v-for="item in useTimeErrData" :key="item">{{ item }}</div>
+        </a-col>
       </a-row>
     </a-drawer>
   </div>
@@ -40,11 +40,11 @@
 
 <script>
   const columns = [
-    // {
-    //   title: 'id',
-    //   dataIndex: 'id',
-    //   key: 'id'
-    // },
+    {
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id'
+    },
     {
       title: '学生编号',
       dataIndex: 'studentId',
@@ -54,6 +54,11 @@
       title: '学生姓名',
       dataIndex: 'studentName',
       key: 'studentName'
+    },
+    {
+      title: '身份证',
+      dataIndex: 'idCard',
+      key: 'idCard'
     },
     {
       title: '公司',
@@ -128,6 +133,7 @@
         })
         this.axios.get('/test-result/getUseTimeNull').then(data => {
           this.useTimeErrData = data
+          console.log(this.useTimeErrData)
         })
       },
       onClose () {

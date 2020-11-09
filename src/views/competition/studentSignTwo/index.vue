@@ -22,21 +22,22 @@
               {{ `已选择 ${selectedRowKeys.length} 人` }}
             </template>
           </span>
-
-          <a-table
-            rowKey="id"
-            :columns="columns"
-            :data-source="data"
-            :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-            :pagination="false"
-            style="margin-top: 10px">
-            <span slot="action" slot-scope="text,record">
-              <div v-if="record.testDayState === 2">已进入备考区</div>
-              <div v-else-if="record.testDayState=== 1">候考区等待</div>
-              <div v-else-if="record.testDayState=== 3">已进入考试区</div>
-              <div v-else-if="record.testDayState=== 4">已离场</div>
-            </span>
-          </a-table>
+          <a-card>
+            <a-table
+              rowKey="id"
+              :columns="columns"
+              :data-source="data"
+              :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+              :pagination="false"
+              style="margin-top: 10px">
+              <span slot="action" slot-scope="text,record">
+                <div v-if="record.testDayState === 2">已进入备考区</div>
+                <div v-else-if="record.testDayState=== 1">候考区等待</div>
+                <div v-else-if="record.testDayState=== 3">已进入考试区</div>
+                <div v-else-if="record.testDayState=== 4">已离场</div>
+              </span>
+            </a-table>
+          </a-card>
         </a-col>
       </a-row>
     </div>
