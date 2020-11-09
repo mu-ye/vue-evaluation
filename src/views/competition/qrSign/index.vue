@@ -23,7 +23,7 @@
           <a-descriptions-item label="照片" span="3">
             <div style="width: 100%;text-align: center">
               <img
-                style="width:50px; height:50px;"
+                style="width:150px; height:150px;"
                 :src="signInfo.url"
               />
             </div>
@@ -31,8 +31,8 @@
           <a-descriptions-item label="编号">
             <p style="font-size: 24px"> {{ signInfo.code }}</p>
           </a-descriptions-item>
-          <!--        <a-descriptions-item label="姓名">-->
-          <!--          {{ signInfo.name }}-->
+                  <a-descriptions-item label="姓名">
+                    {{ signInfo.name }}
           <!--        </a-descriptions-item>-->
           <!--        <a-descriptions-item label="年龄">-->
           <!--          {{ signInfo.age }}-->

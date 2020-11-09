@@ -13,12 +13,12 @@
         </a-upload>
       </div>
       <a-table :columns="columns" :data-source="data" rowKey="id" :pagination="false" style="margin-top: 10px">
-           <span slot="action" slot-scope="text, record">
-        <img
-          style="width:50px; height:50px;"
-          :src="record"
-        />
-           </span>
+        <span slot="action" slot-scope="text, record">
+          <img
+            style="height:50px;"
+            :src="`http://172.18.10.201:8889/res/file/idCard/${record.idCard}.png`"
+          />
+        </span>
       </a-table>
     </a-card>
   </div>

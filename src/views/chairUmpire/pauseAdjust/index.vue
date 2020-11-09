@@ -10,13 +10,13 @@
           :columns="columns"
           :data-source="forAdjustList"
           :pagination="false">
-            <span slot="info" slot-scope="text,record">
-              <div v-if="record.flag === false">无效</div>
-              <div v-else-if="record.flag=== true">有效</div>
-            </span>
+          <span slot="info" slot-scope="text,record">
+            <div v-if="record.flag === false">无效</div>
+            <div v-else-if="record.flag=== true">有效</div>
+          </span>
           <span slot="action" slot-scope="text,record">
-              <div v-if="record.flag === false"><a-button type="primary" @click="changeFlag(record.id)">改为有效</a-button></div>
-            </span>
+            <div v-if="record.flag === false"><a-button type="primary" @click="changeFlag(record.id)">改为有效</a-button></div>
+          </span>
         </a-table>
       </a-card>
     </a-col>
