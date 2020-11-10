@@ -294,22 +294,51 @@ export default {
         this.$message.info('修改成功')
       })
     },
-
-    doNext () {
+    doNextText () {
       this.axios.get('/config/doNext').then(data => {
         this.$message.success('切换场次成功')
         this.getConfigVO()
       })
     },
-    doDraw () {
+    doNext () {
+      const that = this
+      this.$confirm({
+        title: '确认下发?',
+        onOk () {
+          that.doNextText()
+        },
+        onCancel () {}
+      })
+    },
+    doDrawText () {
       this.axios.get('/questionDraw/doDraw').then(data => {
         this.$message.success('抽题成功')
       })
     },
-    doIssue () {
+    doDraw () {
+      const that = this
+      this.$confirm({
+        title: '确认抽题?',
+        onOk () {
+          that.doDrawText()
+        },
+        onCancel () {}
+      })
+    },
+    doIssueText () {
       this.axios.get('/config/doIssue').then(data => {
         this.$message.success('下发试卷试卷成功')
         this.issueState = true
+      })
+    },
+    doIssue () {
+      const that = this
+      this.$confirm({
+        title: '确认下发?',
+        onOk () {
+          that.doIssueText()
+        },
+        onCancel () {}
       })
     },
     doStudentMiss (id) {
