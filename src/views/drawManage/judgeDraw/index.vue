@@ -18,14 +18,14 @@
         <a-col :span="8">
           <a-table :columns="columns" :data-source="switchData" bordered :pagination="false" rowKey="code">
             <template slot="title">
-              <p style="text-align: center"><b>交换机组网</b></p>
+              <p style="text-align: center"><b>视频搭建</b></p>
             </template>
           </a-table>
         </a-col>
         <a-col :span="8">
           <a-table :columns="columns" :data-source="videoData" bordered :pagination="false" rowKey="code">
             <template slot="title">
-              <p style="text-align: center"><b>视频搭建</b></p>
+              <p style="text-align: center"><b>交换机组网</b></p>
             </template>
           </a-table>
         </a-col>
