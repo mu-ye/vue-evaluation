@@ -4,7 +4,7 @@
       <a-tab-pane key="login" tab="帐号密码登录">
         <a-form-model :model="form" :rules="rules" ref="ruleForm">
           <a-form-model-item prop="username">
-            <a-input v-model="form.username" allowClear :maxLength="10" placeholder="帐号：请输入帐号" size="large">
+            <a-input v-model="form.username" allowClear :maxLength="20" placeholder="帐号：请输入帐号" size="large">
               <a-icon slot="prefix" type="user" :style="{ color: '#1890FF' }" />
             </a-input>
           </a-form-model-item>

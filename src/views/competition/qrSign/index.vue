@@ -33,6 +33,7 @@
           </a-descriptions-item>
           <a-descriptions-item label="姓名">
             {{ signInfo.name }}
+<<<<<<< HEAD
           </a-descriptions-item>
           <!--        <a-descriptions-item label="年龄">-->
           <!--          {{ signInfo.age }}-->
@@ -50,6 +51,26 @@
             <p style="font-size: 24px"><b> {{ signInfo.seatInfo }}</b></p>
           </a-descriptions-item>
         </a-descriptions>
+=======
+            <!--        </a-descriptions-item>-->
+            <!--        <a-descriptions-item label="年龄">-->
+            <!--          {{ signInfo.age }}-->
+            <!--        </a-descriptions-item>-->
+            <a-descriptions-item label="身份证">
+              <p style="font-size: 24px">{{ signInfo.idCard }}</p>
+            </a-descriptions-item>
+            <!--        <a-descriptions-item label="公司名称">-->
+            <!--          {{ signInfo.companyName }}-->
+            <!--        </a-descriptions-item>-->
+            <!--        <a-descriptions-item label="手机">-->
+            <!--          {{ signInfo.phone }}-->
+            <!--        </a-descriptions-item>-->
+
+            <a-descriptions-item v-if="signInfo.type == 2" label="考位">
+              <p style="font-size: 24px"><b> {{ signInfo.seatInfo }}</b></p>
+            </a-descriptions-item>
+          </a-descriptions-item></a-descriptions>
+>>>>>>> f8df3711211f10f6c510bd061a958668a7b53c9a
       </div>
     </a-modal>
     <div v-if="signInfo.type == 1">
