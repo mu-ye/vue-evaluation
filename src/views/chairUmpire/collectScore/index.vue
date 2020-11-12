@@ -124,6 +124,7 @@
       },
       saveResult () {
         this.axios.post('/test-final-result/saveResult', this.finalResult).then(() => {
+          this.$message.success('保存成功！')
         })
       },
       getResultDrawer () {

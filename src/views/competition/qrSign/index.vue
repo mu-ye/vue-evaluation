@@ -1,6 +1,6 @@
 <template>
   <div style="font-size: 24px">
-<!--    <a-button @click="test()">test</a-button>-->
+    <!--    <a-button @click="test()">test</a-button>-->
     <a-alert
       message="提示信息！"
       :description="msg"
@@ -23,7 +23,7 @@
           <a-descriptions-item label="照片" span="3">
             <div style="width: 100%;text-align: center">
               <img
-                style="width:150px; height:150px;"
+                style="height:150px;"
                 :src="signInfo.url"
               />
             </div>
@@ -31,9 +31,9 @@
           <a-descriptions-item label="编号">
             <p style="font-size: 24px"> {{ signInfo.code }}</p>
           </a-descriptions-item>
-                  <a-descriptions-item label="姓名">
-                    {{ signInfo.name }}
-          <!--        </a-descriptions-item>-->
+          <a-descriptions-item label="姓名">
+            {{ signInfo.name }}
+          </a-descriptions-item>
           <!--        <a-descriptions-item label="年龄">-->
           <!--          {{ signInfo.age }}-->
           <!--        </a-descriptions-item>-->
@@ -46,7 +46,6 @@
           <!--        <a-descriptions-item label="手机">-->
           <!--          {{ signInfo.phone }}-->
           <!--        </a-descriptions-item>-->
-
           <a-descriptions-item v-if="signInfo.type == 2" label="考位">
             <p style="font-size: 24px"><b> {{ signInfo.seatInfo }}</b></p>
           </a-descriptions-item>
@@ -184,7 +183,7 @@
             if (data != null && data.name != null) {
               this.signInfo = data
               console.log(data)
-             this.showModal()
+              this.showModal()
               clearInterval(this.timer)
               // this.$message.info('有数据')
               if (this.signInfo.type === 1) {
@@ -222,11 +221,11 @@
           })
         }
         if (this.signInfo.type === 2) {
-        this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
-          this.signTwoData = []
-          this.signTwoData = data
-          this.titleInfo = '备考区人数：' + data.length + '人'
-        })
+          this.axios.get('/student/getStudentListHaveSignTwo').then(data => {
+            this.signTwoData = []
+            this.signTwoData = data
+            this.titleInfo = '备考区人数：' + data.length + '人'
+          })
         }
         if (this.signInfo.type === 4) {
           this.axios.get('/student/getStudentListHaveSignAway').then(data => {
