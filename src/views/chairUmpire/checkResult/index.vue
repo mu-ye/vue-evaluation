@@ -238,15 +238,20 @@
   ]
   const columnsDetailTwo = [
     {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id'
+      title: '得分',
+      dataIndex: 'cent',
+      scopedSlots: { customRender: 'cent' }
     },
     {
       title: '裁判姓名',
       dataIndex: 'judgeName',
       key: 'judgeName'
     },
+    {
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id'
+    }
     // {
     //   title: '题目',
     //   dataIndex: 'questionName',
@@ -257,11 +262,7 @@
     //   dataIndex: 'questionStandardName',
     //   key: 'questionStandardName'
     // },
-    {
-      title: '得分',
-      dataIndex: 'cent',
-      scopedSlots: { customRender: 'cent' }
-    }
+
   ]
   const EditableCell = {
     template: `
