@@ -160,7 +160,7 @@ export default {
             {
               state: 1,
               label: '已就绪',
-              color: '#254000'
+              color: '#00baff'
             },
             {
               state: 2,
