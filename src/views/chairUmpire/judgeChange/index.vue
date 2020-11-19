@@ -4,7 +4,7 @@
       <a-col :span="22" offset="1">
         <a-table :columns="columns" :data-source="judgeData" bordered :pagination="false" rowKey="code">
           <span slot="studentMissAction" slot-scope="text, record">
-            <a-button type="primary" @click="showDrawer(record.typeName, record.id)">
+            <a-button type="primary" @click="showDrawer(record.judgeType, record.id)">
               变更裁判
             </a-button>
           </span></a-table
@@ -101,8 +101,8 @@ const columns = [
   },
   {
     title: '监考类型',
-    className: 'typeName',
-    dataIndex: 'typeName',
+    className: 'judgeType',
+    dataIndex: 'judgeType',
     align: 'center'
   },
   {
