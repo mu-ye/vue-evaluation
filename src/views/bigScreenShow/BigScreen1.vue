@@ -5,7 +5,7 @@
       <div class="header-container">
         <dv-decoration-8 class="header-left-decoration" />
         <div class="header-center-container">
-          <div class="header-center-title">“新誉杯”全国通信专业技能竞赛</div>
+          <div class="header-center-title">#######技能竞赛</div>
           <dv-decoration-5 :dur="3" class="header-center-decoration" />
         </div>
         <dv-decoration-8 class="header-right-decoration" :reverse="true" />
